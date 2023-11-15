@@ -5,19 +5,8 @@ import (
 	"os"
 	"regexp"
 	"strings"
-	"time"
 	"path/filepath"
 )
-
-// File is
-type File struct {
-	fileName  string
-	filePath  string
-	extension string
-	sizeKB    float64
-	createdAt time.Time
-	updatedAt time.Time
-}
 
 // Exists returns file existence
 func Exists(p string) (bool, error) {
