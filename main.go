@@ -1,9 +1,10 @@
 package main
 
 import (
+	"os"
 	"github.com/MasahiroSakoda/ffextractor/internal/cmd"
 )
 
 func main() {
-	cmd.Execute()
+	os.Exit(cmd.Execute(os.Args[1:]))
 }

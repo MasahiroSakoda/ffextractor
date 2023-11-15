@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"fmt"
 	"os"
 	"runtime/debug"
 
@@ -18,11 +19,13 @@ var rootCmd = &cobra.Command{
 }
 
 // Execute : root command
-func Execute() {
-	err := rootCmd.Execute()
-	if err != nil {
-		os.Exit(1)
+func Execute(args []string) int {
+	rootCmd.SetArgs(args)
+	if err := rootCmd.Execute(); err != nil {
+		fmt.Fprintf(rootCmd.OutOrStderr(), "Err: %s\n", err)
+		return 1
 	}
+	return 0
 }
 
 func init() {
