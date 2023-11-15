@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"os"
+	"errors"
 	"github.com/spf13/cobra"
 )
 
@@ -13,9 +14,13 @@ func newCompletionCmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "completion",
 		Short: "Generates shell completion scripts",
-		Long:  "",
-		Run: func(cmd *cobra.Command, args []string) {
-			cmd.Help()
+		Long:  "Generates shell completion scripts",
+		RunE: func(cmd *cobra.Command, args []string) error {
+			err := cmd.Help()
+			if err != nil {
+				return err
+			}
+			return errors.New("a valid subcommand is required")
 		},
 	}
 	cmd.AddCommand(
@@ -30,9 +35,12 @@ func newCompletionBashCmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "bash",
 		Short: "Generates bash completion scripts",
-		Long:  "",
+		Long:  "Generates bash completion scripts",
 		Run: func(cmd *cobra.Command, args []string) {
-			rootCmd.GenZshCompletion(os.Stdout)
+			err := rootCmd.GenBashCompletion(os.Stdout)
+			if err != nil {
+				os.Exit(1)
+			}
 		},
 	}
 	return cmd
@@ -42,8 +50,12 @@ func newCompletionZshCmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "zsh",
 		Short: "Generates zsh completion scripts",
-		Long:  "",
+		Long:  "Generates zsh completion scripts",
 		Run: func(cmd *cobra.Command, args []string) {
+			err := rootCmd.GenZshCompletion(os.Stdout)
+			if err != nil {
+				os.Exit(1)
+			}
 		},
 	}
 	return cmd
@@ -53,9 +65,12 @@ func newCompletionFishCmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "completion",
 		Short: "Generates fish completion scripts",
-		Long:  "",
+		Long:  "Generates fish completion scripts",
 		Run: func(cmd *cobra.Command, args []string) {
-			rootCmd.GenFishCompletion(os.Stdout, true)
+			err := rootCmd.GenFishCompletion(os.Stdout, true)
+			if err != nil {
+				os.Exit(1)
+			}
 		},
 	}
 	return cmd
