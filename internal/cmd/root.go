@@ -27,28 +27,20 @@ func Execute() {
 	}
 }
 
-// Init : initialize at first launch
-func Init() {
+func init() {
 	if version == "" {
 		if info, ok := debug.ReadBuildInfo(); ok {
 			version = info.Main.Version
 		}
 	}
 	rootCmd.Version = version
-	// _ = notifyNewRelease(os.Stderr)
-
-	rootCmd.AddCommand(
-		silentCmd,
-		blackoutCmd,
-		configCmd,
-	)
+	_ = notifyNewRelease(os.Stderr)
 
 	for _, cmd := range []*cobra.Command{
 		silentCmd,
 		blackoutCmd,
 		configCmd,
 	} {
-		// --config
-		cmd.Flags().StringVarP(&flagConfig, "config", "c", "./clive.yml", "config file name")
+		rootCmd.AddCommand(cmd)
 	}
 }
