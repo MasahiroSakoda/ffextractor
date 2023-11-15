@@ -8,6 +8,7 @@ multi-platfom cli tool for media extractor using [`ffmpeg`][ffmpeg-website]
 [![ffmpeg][ffmpeg-badge]][ffmpeg-website]
 [![license][license-badge]][license-file]
 [![commit activity](https://img.shields.io/github/commit-activity/m/MasahiroSakoda/ffextractor)](https://github.com/MasahiroSakoda/ffextractor/graphs/commit-activity)
+[![codecov](https://codecov.io/gh/MasahiroSakoda/ffextractor/graph/badge.svg?token=YT6P15G01J)](https://codecov.io/gh/MasahiroSakoda/ffextractor)
 <img src="https://img.shields.io/github/repo-size/MasahiroSakoda/ffextractor?style=flat-square&label=Repo" alt="Repo size" />
 
 [ffmpeg-badge]: https://img.shields.io/badge/Powered%20by-ffmpeg-blue.svg
