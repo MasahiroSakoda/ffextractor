@@ -9,8 +9,6 @@ import (
 
 var (
 	version string
-
-	flagConfig string
 )
 
 var rootCmd = &cobra.Command{
