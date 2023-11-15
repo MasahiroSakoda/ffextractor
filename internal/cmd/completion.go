@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"os"
 	"github.com/spf13/cobra"
 )
 
@@ -15,6 +16,21 @@ func newCompletionCmd() *cobra.Command {
 		Long:  "",
 		Run: func(cmd *cobra.Command, args []string) {
 			cmd.Help()
+		},
+	}
+	cmd.AddCommand(
+		newCompletionBashCmd(),
+	)
+	return cmd
+}
+
+func newCompletionBashCmd() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:   "bash",
+		Short: "Generates bash completion scripts",
+		Long:  "",
+		Run: func(cmd *cobra.Command, args []string) {
+			rootCmd.GenZshCompletion(os.Stdout)
 		},
 	}
 	return cmd
