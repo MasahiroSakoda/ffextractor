@@ -21,6 +21,7 @@ func newCompletionCmd() *cobra.Command {
 	cmd.AddCommand(
 		newCompletionBashCmd(),
 		newCompletionZshCmd(),
+		newCompletionFishCmd(),
 	)
 	return cmd
 }
@@ -43,6 +44,18 @@ func newCompletionZshCmd() *cobra.Command {
 		Short: "Generates zsh completion scripts",
 		Long:  "",
 		Run: func(cmd *cobra.Command, args []string) {
+		},
+	}
+	return cmd
+}
+
+func newCompletionFishCmd() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:   "completion",
+		Short: "Generates fish completion scripts",
+		Long:  "",
+		Run: func(cmd *cobra.Command, args []string) {
+			rootCmd.GenFishCompletion(os.Stdout, true)
 		},
 	}
 	return cmd
