@@ -114,7 +114,7 @@ func TestRemoveFile(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			if _, errCreate := CreateFile(tt.filepath); errCreate != nil {
-				t.Errorf("CreateFile() error = %v, want %v", errCreate, tt.wantErr)
+				assert.Equal(t, tt.wantErr, errCreate != nil)
 			}
 			if errRemove := RemoveFile(tt.filepath); errRemove != nil {
 				assert.Equal(t, tt.wantErr, errRemove != nil)
