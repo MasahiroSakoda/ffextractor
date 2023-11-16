@@ -68,8 +68,75 @@ func TestIsExecutable(t *testing.T) {
 	}
 }
 
-// TODO: implement test
+func TestUnixHomeDir(t *testing.T) {
+	tests := []struct {
+		name         string
+		wantErr      bool
+	}{
+		{ name: "Successful fetch of $HOME directory", wantErr: false },
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			_, err := UnixHomeDir()
+			if (err != nil) != tt.wantErr {
+				t.Fatalf("UnixHomeDir() error = %v, wantErr %v", err, tt.wantErr)
+			}
+		})
+	}
+}
+
+func TestGetConfigDir(t *testing.T) {
+	tests := []struct {
+		name         string
+		wantErr      bool
+	}{
+		{ name: "Successful fetch of $XDG_CONFIG_HOME directory", wantErr: false },
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			_, err := GetConfigDir()
+			if (err != nil) != tt.wantErr {
+				t.Fatalf("GetConfigDir() error = %v, wantErr %v", err, tt.wantErr)
+			}
+		})
+	}
+}
+
+func TestGetConfigFilePath(t *testing.T) {
+	tests := []struct {
+		name         string
+		wantErr      bool
+	}{
+		{ name: "Successful fetch of config.toml", wantErr: false },
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			_, err := GetConfigFilePath()
+			if (err != nil) != tt.wantErr {
+				t.Fatalf("GetConfigFilePath() error = %v, wantErr %v", err, tt.wantErr)
+			}
+		})
+	}
+}
+
 func TestGetFileList(t *testing.T) {
+	homeDir, _ := UnixHomeDir()
+	tests := []struct {
+		name     string
+		path     string
+		wantErr  bool
+	}{
+		{ name: "Successful", path: homeDir, wantErr: false },
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got, err := GetFileList(tt.path)
+			if (err != nil) != tt.wantErr {
+				t.Fatalf("GetFileList() error = %v, wantErr %v", err, tt.wantErr)
+			}
+			assert.Equal(t, tt.wantErr, got == nil)
+		})
+	}
 }
 
 // TODO: implement test
