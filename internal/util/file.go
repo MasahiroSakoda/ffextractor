@@ -38,6 +38,18 @@ func UnixHomeDir() (string, error) {
 	return os.Getenv("HOME"), nil
 }
 
+// GetConfigDir returns $XDG_CONFIG_HOME directory
+func GetConfigDir() (string, error) {
+	if userConfigDir, err := os.UserConfigDir(); err != nil {
+		return filepath.Join(userConfigDir, ProductName), nil
+	}
+	homeDir, _ := UnixHomeDir()
+	if homeDir == "" {
+		return "", errors.New("unable to get current user home directory: os/user lookup failed; $HOME is empty")
+	}
+	return filepath.Join(homeDir, ".config", ProductName), nil
+}
+
 // GetFileList returns file list
 func GetFileList(p string) ([]string, error) {
 	return filepath.Glob(p)

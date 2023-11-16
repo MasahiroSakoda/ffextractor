@@ -85,6 +85,23 @@ func TestUnixHomeDir(t *testing.T) {
 	}
 }
 
+func TestGetConfigDir(t *testing.T) {
+	tests := []struct {
+		name         string
+		wantErr      bool
+	}{
+		{ name: "Successful fetch of $XDG_CONFIG_HOME directory", wantErr: false },
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			_, err := GetConfigDir()
+			if (err != nil) != tt.wantErr {
+				t.Fatalf("GetConfigDir() error = %v, wantErr %v", err, tt.wantErr)
+			}
+		})
+	}
+}
+
 // TODO: implement test
 func TestGetFileList(t *testing.T) {
 }
