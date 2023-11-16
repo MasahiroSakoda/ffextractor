@@ -50,6 +50,16 @@ func GetConfigDir() (string, error) {
 	return filepath.Join(homeDir, ".config", ProductName), nil
 }
 
+// GetConfigFilePath returns config file path for `ffextractor`
+func GetConfigFilePath() (string, error) {
+	configFile := "config.toml"
+	configDir, err := GetConfigDir()
+	if err != nil {
+		return filepath.Join("~/.config/ffextractor/", configFile), nil
+	}
+	return filepath.Join(configDir, configFile), nil
+}
+
 // GetFileList returns file list
 func GetFileList(p string) ([]string, error) {
 	return filepath.Glob(p)

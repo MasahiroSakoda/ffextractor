@@ -102,6 +102,23 @@ func TestGetConfigDir(t *testing.T) {
 	}
 }
 
+func TestGetConfigFilePath(t *testing.T) {
+	tests := []struct {
+		name         string
+		wantErr      bool
+	}{
+		{ name: "Successful fetch of config.toml", wantErr: false },
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			_, err := GetConfigFilePath()
+			if (err != nil) != tt.wantErr {
+				t.Fatalf("GetConfigFilePath() error = %v, wantErr %v", err, tt.wantErr)
+			}
+		})
+	}
+}
+
 // TODO: implement test
 func TestGetFileList(t *testing.T) {
 }
