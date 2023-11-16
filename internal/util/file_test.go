@@ -68,6 +68,23 @@ func TestIsExecutable(t *testing.T) {
 	}
 }
 
+func TestUnixHomeDir(t *testing.T) {
+	tests := []struct {
+		name         string
+		wantErr      bool
+	}{
+		{ name: "Successful fetch of $HOME directory", wantErr: false },
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			_, err := UnixHomeDir()
+			if (err != nil) != tt.wantErr {
+				t.Fatalf("UnixHomeDir() error = %v, wantErr %v", err, tt.wantErr)
+			}
+		})
+	}
+}
+
 // TODO: implement test
 func TestGetFileList(t *testing.T) {
 }
