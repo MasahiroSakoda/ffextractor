@@ -119,8 +119,24 @@ func TestGetConfigFilePath(t *testing.T) {
 	}
 }
 
-// TODO: implement test
 func TestGetFileList(t *testing.T) {
+	homeDir, _ := UnixHomeDir()
+	tests := []struct {
+		name     string
+		path     string
+		wantErr  bool
+	}{
+		{ name: "Successful", path: homeDir, wantErr: false },
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got, err := GetFileList(tt.path)
+			if (err != nil) != tt.wantErr {
+				t.Fatalf("GetFileList() error = %v, wantErr %v", err, tt.wantErr)
+			}
+			assert.Equal(t, tt.wantErr, got == nil)
+		})
+	}
 }
 
 // TODO: implement test
