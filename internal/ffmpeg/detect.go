@@ -17,3 +17,13 @@ func DetectSilence(src string) ([]byte, error) {
 		"-f", "null", "-"}
 	return exec.Command("ffmpeg", args...).CombinedOutput()
 }
+
+// DetectBlackout returns stdout for detected blackout parts
+func DetectBlackout(src string) ([]byte, error) {
+	duration  := config.Root.Extract.BlackoutDuration
+	args := []string{
+		"-i", src,
+		"-af", fmt.Sprintf("blackdetect=%2.3f", duration),
+		"-f", "null", "-"}
+	return exec.Command("ffmpeg", args...).CombinedOutput()
+}
