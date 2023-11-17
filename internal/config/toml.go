@@ -13,10 +13,22 @@ import (
 // Root :
 var Root = &Config{}
 
+var defaultConfig = &Config{
+	File: FileSection{
+		Overwrite:  false,
+		Annotation: "_merged",
+	},
+	Extract: ExtractSection{
+		Threshold:       -50,
+		SilenceDuration:  4.5,
+		BlackoutDuration: 5.5,
+	},
+}
+
 func init() {
-	config    := defaultConfig()
-	path, _   := util.GetConfigFilePath()
-	exists, _ := util.Exists(path)
+	config  := defaultConfig
+	path, _ := util.GetConfigFilePath()
+	exists  := util.Exists(path)
 	if !exists {
 		if _, err := util.CreateFile(path); err == nil {
 			_ = config.Save(path)
@@ -34,10 +46,12 @@ func (config *Config) Save(path string) error {
 }
 
 // Load :
-func (config *Config) Load() error {
-	configFile, err := util.GetConfigFilePath()
-	if err != nil {
-		return errors.New("failed to get config path")
+func (config *Config) Load(path string) error {
+	var configFile string
+	if !util.Exists(path) {
+		configFile, _ = util.GetConfigFilePath()
+	} else {
+		configFile = path
 	}
 	fh, err := os.Open(configFile)
 	if err != nil {
@@ -55,18 +69,4 @@ func (config *Config) Import(fh io.Reader) error {
 		return err
 	}
 	return toml.Unmarshal(data, &config)
-}
-
-func defaultConfig() *Config {
-	return &Config{
-		File: FileSection{
-			Overwrite:  false,
-			Annotation: "_merged",
-		},
-		Extract: ExtractSection{
-			Threshold:       -50,
-			SilenceDuration:  4.5,
-			BlackoutDuration: 5.5,
-		},
-	}
 }

@@ -21,10 +21,8 @@ func TestExists(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, err := Exists(tt.filepath)
-			if err != nil {
-				assert.Equal(t, tt.want, got)
-			}
+			got := Exists(tt.filepath)
+			assert.Equal(t, tt.want, got)
 		})
 	}
 }

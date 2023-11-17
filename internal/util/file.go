@@ -14,14 +14,11 @@ import (
 const ProductName = "ffextractor"
 
 // Exists returns file existence
-func Exists(p string) (bool, error) {
-	if _, err := os.Stat(p); err != nil {
-		if os.IsNotExist(err) {
-			return false, nil
-		}
-		return false, err
+func Exists(p string) bool {
+	if _, err := os.Stat(p); os.IsNotExist(err) {
+		return false
 	}
-	return true, nil
+	return true
 }
 
 // IsExecutable returns whether a file has execution permissions
