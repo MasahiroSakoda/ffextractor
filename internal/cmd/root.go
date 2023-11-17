@@ -12,10 +12,18 @@ var (
 	version string
 )
 
+var subCmds = []string{
+	"silent",
+	"blackout",
+	"config",
+}
+
 var rootCmd = &cobra.Command{
 	Use:   "ffextractor",
 	Short: "Automates terminal operations",
 	Long:  "Automates terminal operations.",
+	ValidArgs: subCmds,
+	Args: cobra.MinimumNArgs(3),
 }
 
 // Execute : root command
