@@ -8,7 +8,7 @@ var configCmd = &cobra.Command{
 	Use:   "config",
 	Short: "Configure ffextractor options.",
 	Long:  "Configure ffextractor options.",
-	Args:  cobra.ExactArgs(0),
+	Args:  cobra.ExactArgs(2),
 	RunE: func(cmd *cobra.Command, args []string) error {
 		return nil
 	},
