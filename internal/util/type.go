@@ -38,7 +38,7 @@ func ParseType(value []byte) Type {
 	if IsBoolean(value) {
 		return TypeBoolean
 	}
-	if bytes.Compare(value, []byte("null")) == 0 {
+	if bytes.Equal(value, []byte("null")) {
 		return TypeNull
 	}
 	for _, b := range value {
