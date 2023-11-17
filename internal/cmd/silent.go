@@ -8,7 +8,7 @@ var silentCmd = &cobra.Command{
 	Use:   "silent",
 	Short: "Extract media exclude silent parts.",
 	Long:  "Extract media exclude silent parts.",
-	Args:  cobra.ExactArgs(0),
+	Args:  cobra.MinimumNArgs(1),
 	RunE: func(cmd *cobra.Command, args []string) error {
 		return nil
 	},
