@@ -97,7 +97,7 @@ configure options
 ffextractor config overwrite false
 ffextractor config annotation "_merged"
 
-ffextractor config threshold -50
+ffextractor config threshold 50
 ffextractor config silence_duration 3.5
 ffextractor config blackout_duration 4.5
 ```
@@ -111,7 +111,7 @@ ffextractor config blackout_duration 4.5
 overwrite  = false     # Overwrite basefile
 annotation = "_merged" # Annotation for merged file
 
-threshold = -50        # threshold to detect silence (dB)
+threshold = 50           # threshold to detect silence (dB) [negative value]
 silence_duration  = 3.5  # ducration to detect silence (second)
 blackout_duration = 4.5  # ducration to detect blackout (second)
 ```
