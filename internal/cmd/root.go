@@ -48,7 +48,6 @@ func init() {
 	for _, cmd := range []*cobra.Command{
 		silentCmd,
 		blackoutCmd,
-		configCmd,
 	} {
 		rootCmd.AddCommand(cmd)
 	}
