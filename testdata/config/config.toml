@@ -1,0 +1,8 @@
+[file]
+overwrite = false
+annotation = '_merged'
+
+[extract]
+threshold = -50
+silence_duration = 4.5
+blackout_duration = 5.5
