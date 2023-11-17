@@ -63,7 +63,7 @@ func newCompletionZshCmd() *cobra.Command {
 
 func newCompletionFishCmd() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "completion",
+		Use:   "fish",
 		Short: "Generates fish completion scripts",
 		Long:  "Generates fish completion scripts",
 		Run: func(cmd *cobra.Command, args []string) {

@@ -12,10 +12,18 @@ var (
 	version string
 )
 
+var subCmds = []string{
+	"silent",
+	"blackout",
+	"config",
+}
+
 var rootCmd = &cobra.Command{
 	Use:   "ffextractor",
 	Short: "Automates terminal operations",
 	Long:  "Automates terminal operations.",
+	ValidArgs: subCmds,
+	Args: cobra.MinimumNArgs(3),
 }
 
 // Execute : root command
@@ -40,7 +48,6 @@ func init() {
 	for _, cmd := range []*cobra.Command{
 		silentCmd,
 		blackoutCmd,
-		configCmd,
 	} {
 		rootCmd.AddCommand(cmd)
 	}
