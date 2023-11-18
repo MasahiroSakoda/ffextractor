@@ -1,11 +1,10 @@
 package ui
 
 import (
-	"github.com/charmbracelet/bubbles/spinner"
-	"github.com/charmbracelet/bubbles/progress"
-	"github.com/charmbracelet/lipgloss"
 	"github.com/MasahiroSakoda/ffextractor/internal/styles"
 
+	"github.com/charmbracelet/lipgloss"
+	"github.com/charmbracelet/bubbles/spinner"
 	tea "github.com/charmbracelet/bubbletea"
 )
 
@@ -13,8 +12,14 @@ import (
 type Model struct {
 	// ui components (view models)
 	Spinner  spinner.Model
-	Progress progress.Model
-	Percent  float64
+}
+
+// Init : builder func for bubbletea
+func (m *Model) Init() tea.Cmd {
+	// return m.Spinner.Tick
+	return tea.Batch(
+		m.Spinner.Tick,
+	)
 }
 
 var _ tea.Model = (*Model)(nil)
@@ -25,6 +30,5 @@ var helpStyle = lipgloss.NewStyle().Foreground(lipgloss.Color("#626262")).Render
 func New() *Model {
 	return &Model{
 		Spinner:  spinner.New(spinner.WithSpinner(spinner.Dot), spinner.WithStyle(styles.StyleSpinner)),
-		Progress: progress.New(progress.WithDefaultGradient()),
 	}
 }
