@@ -1,13 +1,9 @@
 package ui
 
 import (
-	"time"
-
 	"github.com/charmbracelet/bubbles/spinner"
 	tea "github.com/charmbracelet/bubbletea"
 )
-
-type tickMsg time.Time
 
 const (
 	padding  = 2
