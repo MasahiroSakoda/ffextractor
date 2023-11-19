@@ -19,9 +19,9 @@ var defaultConfig = &Config{
 		Annotation: "_merged",
 	},
 	Extract: ExtractSection{
-		Threshold:       -50,
-		SilenceDuration:  4.5,
-		BlackoutDuration: 5.5,
+		Threshold:       -10,
+		SilenceDuration:  10.000,
+		BlackoutDuration: 10.000,
 	},
 }
 
