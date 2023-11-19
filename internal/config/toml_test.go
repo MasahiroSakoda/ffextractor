@@ -34,11 +34,7 @@ func TestSave(t *testing.T) {
 				assert.Error(t, err)
 			}
 			c1 := c
-			err = c.Load(tt.path2)
-			if err != nil {
-				assert.Error(t, err)
-			}
-			c2 := c
+			c2, err := c.Load(tt.path2)
 			if err != nil {
 				assert.Error(t, err)
 			}
@@ -59,16 +55,11 @@ func TestLoad(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			err := c.Load(tt.path1)
+			c1, err := c.Load(tt.path1)
 			if err != nil {
 				assert.Error(t, err)
 			}
-			c1 := c
-			err = c.Load(tt.path2)
-			if err != nil {
-				assert.Error(t, err)
-			}
-			c2 := c
+			c2, err := c.Load(tt.path2)
 			if err != nil {
 				assert.Error(t, err)
 			}

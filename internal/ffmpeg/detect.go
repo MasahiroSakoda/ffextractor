@@ -12,9 +12,10 @@ import (
 
 // DetectSilence returns stdout for detected silence parts
 func DetectSilence(src string) (segments []model.AudioSegment, err error) {
-	threshold := -10
-	duration  := 10.000
-	correction := 0.0
+	extract := config.Root.Extract
+	var threshold = extract.Threshold
+	var duration  = extract.SilenceDuration
+	correction   := 0.0
 	args := []string{
 		"-i", src,
 		"-af", fmt.Sprintf("silencedetect=noise=%ddB:d=%2.3f", threshold, duration),

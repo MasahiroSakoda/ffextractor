@@ -5,7 +5,10 @@ import (
 	"os"
 	"runtime/debug"
 
+	"github.com/MasahiroSakoda/ffextractor/internal/config"
+
 	"github.com/spf13/cobra"
+	"github.com/sirupsen/logrus"
 )
 
 var (
@@ -44,6 +47,11 @@ func init() {
 	}
 	rootCmd.Version = version
 	_ = notifyNewRelease(os.Stderr)
+
+	_, err := config.Root.Load("")
+	if err != nil {
+		logrus.Fatalf("cli: failed to load config")
+	}
 
 	for _, cmd := range []*cobra.Command{
 		silentCmd,
