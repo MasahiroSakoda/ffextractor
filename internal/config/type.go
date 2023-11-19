@@ -4,16 +4,23 @@ package config
 type Config struct {
 	File    FileSection    `toml:"file"`
 	Extract ExtractSection `toml:"extract"`
+	Encode  EncodeSection  `toml:"encode"`
 }
-// File : file options
+// FileSection : file options
 type FileSection struct {
 	Overwrite  bool   `toml:"overwrite"`
 	Annotation string `toml:"annotation"`
 }
 
-// Extract : ffmpeg extract options
+// ExtractSection : ffmpeg extract options
 type ExtractSection struct {
 	Threshold        int     `toml:"threshold"`
 	SilenceDuration  float64 `toml:"silence_duration"`
 	BlackoutDuration float64 `toml:"blackout_duration"`
+}
+
+// EncodeSection : ffmpeg encode options
+type EncodeSection struct {
+	SplitWithEncode  bool `toml:"split_with_encode"`
+	ConcatWithEncode bool `toml:"concat_with_encode"`
 }

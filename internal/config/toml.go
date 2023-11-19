@@ -23,6 +23,10 @@ var defaultConfig = &Config{
 		SilenceDuration:  10.000,
 		BlackoutDuration: 10.000,
 	},
+	Encode: EncodeSection{
+		SplitWithEncode:  true,
+		ConcatWithEncode: true,
+	},
 }
 
 func init() {
