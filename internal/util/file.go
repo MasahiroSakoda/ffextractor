@@ -21,6 +21,47 @@ func Exists(p string) bool {
 	return true
 }
 
+// IsAudioPath :
+func IsAudioPath(path string) bool {
+	return strings.HasSuffix(path, ".mp3")  ||
+           strings.HasSuffix(path, ".m4a")  ||
+           strings.HasSuffix(path, ".ogg")  ||
+           strings.HasSuffix(path, ".oga")  ||
+           strings.HasSuffix(path, ".wav")  ||
+           strings.HasSuffix(path, ".aif")  ||
+           strings.HasSuffix(path, ".aiff") ||
+           strings.HasSuffix(path, ".flac")
+}
+
+// IsVideoPath :
+func IsVideoPath(path string) bool {
+	return strings.HasSuffix(path, ".mp4")  ||
+           strings.HasSuffix(path, ".mkv")  ||
+           strings.HasSuffix(path, ".mov")  ||
+           strings.HasSuffix(path, ".webm") ||
+           strings.HasSuffix(path, ".mpg")  ||
+           strings.HasSuffix(path, ".avi")  ||
+           strings.HasSuffix(path, ".flv")  ||
+           strings.HasSuffix(path, ".wmv")
+}
+
+// IsMediaPath :
+func IsMediaPath(path string) bool {
+	return IsAudioPath(path) || IsVideoPath(path)
+}
+
+// ContainsMedia :
+func ContainsMedia(path string) (bool, error) {
+	isMedia := false
+	err := filepath.WalkDir(path, func(p  string, _ fs.DirEntry, err error) error {
+		if IsMediaPath(p) {
+			isMedia = true
+		}
+		return err
+	})
+	return isMedia, err
+}
+
 // IsExecutable returns whether a file has execution permissions
 func IsExecutable(s fs.FileInfo) bool {
 	return s.Mode().Perm()&0111 == 0111
@@ -55,6 +96,12 @@ func GetConfigFilePath() (string, error) {
 		return filepath.Join("~/.config/ffextractor/", configFile), nil
 	}
 	return filepath.Join(configDir, configFile), nil
+}
+
+// GetFilenameFromPath returns filename from path
+func GetFilenameFromPath(path string) string {
+	segments := strings.Split(path, "/")
+	return segments[len(segments) - 1]
 }
 
 // GetFileList returns file list
