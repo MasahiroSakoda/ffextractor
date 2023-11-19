@@ -4,10 +4,18 @@ import (
 	"io/fs"
 	"fmt"
 	"os"
+	"path/filepath"
+	"runtime"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
-	// "github.com/stretchr/testify/require"
+)
+
+var (
+	_, b, _, _ = runtime.Caller(0)
+
+	// Root folder of this project
+	rootDir = filepath.Join(filepath.Dir(b), "../..")
 )
 
 func TestExists(t *testing.T) {
@@ -27,6 +35,76 @@ func TestExists(t *testing.T) {
 	}
 }
 
+func TestAudioPath(t *testing.T) {
+	tests := []struct {
+		name   string
+		path   string
+		expect bool
+	}{
+		{ path: "example.mp3",  expect: true,  name: "Successful return with mp3 file" },
+		{ path: "example.m4a",  expect: true,  name: "Successful return with m4a file" },
+		{ path: "example.ogg",  expect: true,  name: "Successful return with ogg file" },
+		{ path: "example.oga",  expect: true,  name: "Successful return with oga file" },
+		{ path: "example.wav",  expect: true,  name: "Successful return with wav file" },
+		{ path: "example.aif",  expect: true,  name: "Successful return with aif file" },
+		{ path: "example.aiff", expect: true,  name: "Successful return with aiff file" },
+		{ path: "example.flac", expect: true,  name: "Successful return with flac file" },
+		{ path: "example.m3p",  expect: false, name: "Failed with wrong file" },
+		{ path: "example.fla",  expect: false, name: "Failed with wrong file" },
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := IsAudioPath(tt.path)
+			assert.Equal(t, tt.expect, got)
+		})
+	}
+}
+func TestVideoPath(t *testing.T) {
+	tests := []struct {
+		name   string
+		path   string
+		expect bool
+	}{
+		{ path: "example.mp4",  expect: true,  name: "Successful return with mp4 file" },
+		{ path: "example.mkv",  expect: true,  name: "Successful return with mkv file" },
+		{ path: "example.mov",  expect: true,  name: "Successful return with mov file" },
+		{ path: "example.webm", expect: true,  name: "Successful return with webm file" },
+		{ path: "example.mpg",  expect: true,  name: "Successful return with mpg file" },
+		{ path: "example.avi",  expect: true,  name: "Successful return with avi file" },
+		{ path: "example.flv",  expect: true,  name: "Successful return with flv file" },
+		{ path: "example.wmv",  expect: true,  name: "Successful return with wmv file" },
+		{ path: "example.m4p",  expect: false, name: "Failed with wrong file" },
+		{ path: "example.web",  expect: false, name: "Failed with wrong file" },
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := IsVideoPath(tt.path)
+			assert.Equal(t, tt.expect, got)
+		})
+	}
+}
+
+func TestContainsMedia(t *testing.T) {
+	tests := []struct {
+		name   string
+		path   string
+		expect bool
+	}{
+		{ path: rootDir + "/testdata/ffmpeg", expect: true,  name: "Successful return with proper path" },
+		{ path: rootDir + "/testdata/config", expect: false, name: "Failed with path does not contain media file" },
+		{ path: rootDir + "/completions",     expect: false, name: "Failed with path does not contain media file" },
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got, err := ContainsMedia(tt.path)
+			if err != nil {
+				t.Errorf("failed to read directory")
+			} else {
+				assert.Equal(t, tt.expect, got)
+			}
+		})
+	}
+}
 func TestIsExecutable(t *testing.T) {
 	tests := []struct {
 		perm fs.FileMode
