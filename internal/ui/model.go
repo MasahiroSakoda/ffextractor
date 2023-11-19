@@ -25,7 +25,6 @@ type Model struct {
 	// ui components (view models)
 	spinner spinner.Model
 	table   table.Model
-	err     error
 
 	termWidth  int
 	termHeight int
@@ -35,10 +34,6 @@ type tickMsg time.Time
 type silenceDetectedMsg struct {
 	rows []table.Row
 }
-type blackoutDetectedMsg struct {
-	rows []table.Row
-}
-type errMsg error
 
 var (
 	_ tea.Model = (*Model)(nil)
