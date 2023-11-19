@@ -31,9 +31,6 @@ func (m *Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		m.loading = false
 		m.table.SetRows(msg.rows)
 
-	case blackoutDetectedMsg:
-		m.loading = false
-
 	case tea.WindowSizeMsg:
 		m.termWidth, m.termHeight = msg.Width, msg.Height
 		return m, nil
