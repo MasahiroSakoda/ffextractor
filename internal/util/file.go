@@ -57,6 +57,12 @@ func GetConfigFilePath() (string, error) {
 	return filepath.Join(configDir, configFile), nil
 }
 
+// GetFilenameFromPath returns filename from path
+func GetFilenameFromPath(path string) string {
+	segments := strings.Split(path, "/")
+	return segments[len(segments) - 1]
+}
+
 // GetFileList returns file list
 func GetFileList(p string) ([]string, error) {
 	return filepath.Glob(p)

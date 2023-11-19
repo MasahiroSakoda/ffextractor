@@ -100,6 +100,28 @@ func TestGetConfigDir(t *testing.T) {
 	}
 }
 
+func TestGetFilenameFromPath(t *testing.T) {
+	tests := []struct {
+		name   string
+		path   string
+		file   string
+		expect bool
+	}{
+		{ path: "./valid_file.txt",       file: "valid_file.txt", expect: true,  name: "Successful return filename with relative path" },
+		{ path: "./invalid_file.txt",     file: "valid_file.txt", expect: false, name: "Fail with wrong relative path" },
+		{ path: "~/dev/valid_file.txt",   file: "valid_file.txt", expect: true,  name: "Successful return filename with relative path" },
+		{ path: "~/dev/invalid_file.txt", file: "valid_file.txt", expect: false, name: "Fail with wrong relative path" },
+		{ path: "/tmp/valid_file.txt",    file: "valid_file.txt", expect: true,  name: "Successful return filename with absolute path" },
+		{ path: "/tmp/invalid_file.txt",  file: "valid_file.txt", expect: false, name: "Fail with wrong absolute path" },
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := GetFilenameFromPath(tt.path)
+			assert.Equal(t, tt.expect, got == tt.file )
+		})
+	}
+}
+
 func TestGetConfigFilePath(t *testing.T) {
 	tests := []struct {
 		name         string
