@@ -46,7 +46,7 @@ func (config *Config) Save(path string) error {
 }
 
 // Load :
-func (config *Config) Load(path string) error {
+func (config *Config) Load(path string) (*Config, error) {
 	var configFile string
 	if !util.Exists(path) {
 		configFile, _ = util.GetConfigFilePath()
@@ -55,11 +55,11 @@ func (config *Config) Load(path string) error {
 	}
 	fh, err := os.Open(configFile)
 	if err != nil {
-		return errors.New("failed to open file")
+		return config, errors.New("failed to open file")
 	}
 	defer fh.Close()
 
-	return config.Import(fh)
+	return config, config.Import(fh)
 }
 
 // Import :
