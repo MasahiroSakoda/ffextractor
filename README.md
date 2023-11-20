@@ -7,10 +7,13 @@ multi-platfom cli tool for media extractor using [`ffmpeg`][ffmpeg-website]
 
 [![ffmpeg][ffmpeg-badge]][ffmpeg-website]
 [![license][license-badge]][license-file]
-[![commit activity](https://img.shields.io/github/commit-activity/m/MasahiroSakoda/ffextractor)](https://github.com/MasahiroSakoda/ffextractor/graphs/commit-activity)
-[![codecov](https://codecov.io/gh/MasahiroSakoda/ffextractor/graph/badge.svg?token=YT6P15G01J)](https://codecov.io/gh/MasahiroSakoda/ffextractor)
-<img src="https://img.shields.io/github/repo-size/MasahiroSakoda/ffextractor?style=flat-square&label=Repo" alt="Repo size" />
+![repo-size][repo-size]
 
+[![commit activity](https://img.shields.io/github/commit-activity/m/MasahiroSakoda/ffextractor)](https://github.com/MasahiroSakoda/ffextractor/graphs/commit-activity)
+[![ci](https://github.com/MasahiroSakoda/ffextractor/actions/workflows/ci.yml/badge.svg)](https://github.com/MasahiroSakoda/ffextractor/actions/workflows/ci.yml)
+[![codecov](https://codecov.io/gh/MasahiroSakoda/ffextractor/graph/badge.svg?token=YT6P15G01J)](https://codecov.io/gh/MasahiroSakoda/ffextractor)
+
+[repo-size]: https://img.shields.io/github/repo-size/MasahiroSakoda/ffextractor?style=flat-square&label=Repo
 [linux-badge]: https://img.shields.io/badge/Linux%20-yellow.svg?style=flat-square&logo=linux&logoColor=black
 [macos-badge]: https://img.shields.io/badge/macOS-%23.svg?style=flat-square&logo=apple&color=000000&logoColor=white
 
