@@ -4,6 +4,7 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/MasahiroSakoda/ffextractor/internal/constants"
 	"github.com/MasahiroSakoda/ffextractor/internal/util"
 	"github.com/MasahiroSakoda/ffextractor/internal/ffmpeg"
 	"github.com/MasahiroSakoda/ffextractor/internal/styles"
@@ -91,7 +92,7 @@ func New(path string) *Model {
 func (m *Model) fetchSilenceSegments() tea.Msg {
 	segments, err := ffmpeg.DetectSilence(m.path)
 	if err != nil {
-		return err
+		return constants.ErrSilenceDetect
 	}
 
 	var rows []table.Row
