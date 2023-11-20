@@ -53,9 +53,25 @@ func init() {
 		logrus.Fatalf("cli: failed to load config")
 	}
 
+	configCmd.AddCommand(
+		overwriteCmd,
+		annotationCmd,
+		thresholdCmd,
+		silenceDurationCmd,
+		blackoutDurationCmd,
+	)
+
+	completionCmd.AddCommand(
+		completionBashCmd,
+		completionZshCmd,
+		completionFishCmd,
+	)
+
 	for _, cmd := range []*cobra.Command{
 		silentCmd,
 		blackoutCmd,
+		completionCmd,
+		configCmd,
 	} {
 		rootCmd.AddCommand(cmd)
 	}
