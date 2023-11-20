@@ -79,7 +79,6 @@ func parseDetectedSegments(src string, data []byte) (segments []model.AudioSegme
 
 	newSegments = newSegments[:i]
 	return newSegments, nil
-	return segments, err
 }
 
 // DetectBlackout returns stdout for detected blackout parts
