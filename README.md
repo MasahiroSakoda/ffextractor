@@ -19,8 +19,8 @@ multi-platfom cli tool for media extractor using [`ffmpeg`][ffmpeg-website]
 
 [ffmpeg-badge]: https://img.shields.io/badge/Powered%20by-ffmpeg-blue.svg
 [ffmpeg-website]: https://www.ffmpeg.org/
-[license-badge]: https://img.shields.io/github/license/MasahiroSakoda/dotfiles
-[license-file]: https://github.com/MasahiroSakoda/dotfiles/blob/main/LICENSE
+[license-badge]: https://img.shields.io/github/license/MasahiroSakoda/ffextractor
+[license-file]: https://github.com/MasahiroSakoda/ffextractor/blob/main/LICENSE
 
 ## Table of Contents
 
