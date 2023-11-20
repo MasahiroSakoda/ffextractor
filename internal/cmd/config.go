@@ -16,7 +16,7 @@ var configCmd = &cobra.Command{
 	Long:  "Configure " + constants.CommandName + " options.",
 	Args:  cobra.ExactArgs(2),
 	RunE: func(cmd *cobra.Command, args []string) error {
-		return nil
+		return cmd.Help()
 	},
 }
 
