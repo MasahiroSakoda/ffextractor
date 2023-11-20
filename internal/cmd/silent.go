@@ -2,7 +2,6 @@ package cmd
 
 import (
 	"os"
-	"fmt"
 
 	"github.com/MasahiroSakoda/ffextractor/internal/constants"
 	"github.com/MasahiroSakoda/ffextractor/internal/util"
