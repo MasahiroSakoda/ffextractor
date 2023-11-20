@@ -3,10 +3,10 @@ package config
 import (
 	"io"
 	"os"
-	"errors"
 
 	"github.com/pelletier/go-toml/v2"
 
+	"github.com/MasahiroSakoda/ffextractor/internal/constants"
 	"github.com/MasahiroSakoda/ffextractor/internal/util"
 )
 
@@ -59,7 +59,7 @@ func (config *Config) Load(path string) (*Config, error) {
 	}
 	fh, err := os.Open(configFile)
 	if err != nil {
-		return config, errors.New("failed to open file")
+		return config, constants.ErrFileOpen
 	}
 	defer fh.Close()
 
