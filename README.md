@@ -118,6 +118,10 @@ annotation = "_merged" # Annotation for merged file
 threshold = 10            # threshold to detect silence (dB) [negative value]
 silence_duration  = 10.0  # ducration to detect silence (second)
 blackout_duration = 10.0  # ducration to detect blackout (second)
+
+[encode]
+split_with_encode  = true # split with encoding or not
+concat_with_encode = true # concat with encoding or not
 ```
 
 ### ToDo
