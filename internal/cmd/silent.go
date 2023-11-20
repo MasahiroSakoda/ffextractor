@@ -2,11 +2,12 @@ package cmd
 
 import (
 	"os"
-	"fmt"
 
+	"github.com/MasahiroSakoda/ffextractor/internal/constants"
 	"github.com/MasahiroSakoda/ffextractor/internal/util"
 	"github.com/MasahiroSakoda/ffextractor/internal/ui"
 
+	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 	tea "github.com/charmbracelet/bubbletea"
 )
@@ -20,12 +21,13 @@ var silentCmd = &cobra.Command{
 		path := ""
 		contains, err := util.ContainsMedia(args[0])
 		if err != nil {
+			logrus.Errorf("%s: %v", constants.ErrFileNotFound, err)
 			return err
 		}
 		if contains {
 			path = args[0]
 		} else {
-			fmt.Println("Wrong parameter error:\nparameter must have media file")
+			logrus.Errorf("%s: %v", constants.ErrInvalidParam, err)
 			os.Exit(1)
 		}
 		// segments, err := ffmpeg.DetectSilence(path)
@@ -41,7 +43,7 @@ var silentCmd = &cobra.Command{
 		m := ui.New(path)
 		p := tea.NewProgram(m)
 		if _, err := p.Run(); err != nil {
-			fmt.Println("Error running program:", err)
+			logrus.Errorf("%s: %v", constants.ErrUnexpected, err)
 			os.Exit(1)
 		}
 		p.Quit()

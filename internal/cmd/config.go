@@ -5,6 +5,7 @@ import (
 
 	"github.com/spf13/cobra"
 
+	"github.com/MasahiroSakoda/ffextractor/internal/constants"
 	"github.com/MasahiroSakoda/ffextractor/internal/util"
 	"github.com/sirupsen/logrus"
 )
@@ -16,8 +17,8 @@ func init() {
 func newConfigCmd() *cobra.Command {
 	cmd := &cobra.Command {
 		Use:   "config",
-		Short: "Configure ffextractor options.",
-		Long:  "Configure ffextractor options.",
+		Short: "Configure " + constants.CommandName + " options.",
+		Long:  "Configure " + constants.CommandName + " options.",
 		Args:  cobra.ExactArgs(2),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			return nil

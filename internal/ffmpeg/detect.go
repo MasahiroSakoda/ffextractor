@@ -15,19 +15,23 @@ func DetectSilence(src string) (segments []model.AudioSegment, err error) {
 	extract := config.Root.Extract
 	var threshold = extract.Threshold
 	var duration  = extract.SilenceDuration
-	correction   := 0.0
 	args := []string{
 		"-i", src,
 		"-af", fmt.Sprintf("silencedetect=noise=%ddB:d=%2.3f", threshold, duration),
 		"-f", "null", "-"}
 	output, err := exec.Command("ffmpeg", args...).CombinedOutput()
 	if err != nil {
-		return nil, err
+		return []model.AudioSegment{}, err
 	}
+	return parseDetectedSegments(src, output)
 
+}
+
+func parseDetectedSegments(src string, data []byte) (segments []model.AudioSegment, err error) {
 	var segment model.AudioSegment
 	segment.Start = 0
-	for _, line := range strings.Split(string(output), "\n") {
+	correction   := 0.0
+	for _, line := range strings.Split(string(data), "\n") {
 		if strings.Contains(line, "silence_end") {
 			seconds, err := util.ConvertToSeconds(util.GetStringInBetween(line, "silence_end: ", " "))
 			if err == nil {

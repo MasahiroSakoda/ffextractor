@@ -2,7 +2,9 @@ package cmd
 
 import (
 	"os"
-	"errors"
+
+	"github.com/MasahiroSakoda/ffextractor/internal/constants"
+
 	"github.com/spf13/cobra"
 )
 
@@ -20,7 +22,7 @@ func newCompletionCmd() *cobra.Command {
 			if err != nil {
 				return err
 			}
-			return errors.New("a valid subcommand is required")
+			return constants.ErrInvalidParam
 		},
 	}
 	cmd.AddCommand(
