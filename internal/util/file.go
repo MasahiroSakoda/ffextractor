@@ -8,6 +8,8 @@ import (
 	"regexp"
 	"strings"
 	"errors"
+
+	"github.com/MasahiroSakoda/ffextractor/internal/constants"
 )
 
 // ProductName :
@@ -23,26 +25,22 @@ func Exists(p string) bool {
 
 // IsAudioPath :
 func IsAudioPath(path string) bool {
-	return strings.HasSuffix(path, ".mp3")  ||
-           strings.HasSuffix(path, ".m4a")  ||
-           strings.HasSuffix(path, ".ogg")  ||
-           strings.HasSuffix(path, ".oga")  ||
-           strings.HasSuffix(path, ".wav")  ||
-           strings.HasSuffix(path, ".aif")  ||
-           strings.HasSuffix(path, ".aiff") ||
-           strings.HasSuffix(path, ".flac")
+	for _, ext := range constants.AudioExtensions {
+		if strings.HasSuffix(path, "." + ext) {
+			return true
+		}
+	}
+	return false
 }
 
 // IsVideoPath :
 func IsVideoPath(path string) bool {
-	return strings.HasSuffix(path, ".mp4")  ||
-           strings.HasSuffix(path, ".mkv")  ||
-           strings.HasSuffix(path, ".mov")  ||
-           strings.HasSuffix(path, ".webm") ||
-           strings.HasSuffix(path, ".mpg")  ||
-           strings.HasSuffix(path, ".avi")  ||
-           strings.HasSuffix(path, ".flv")  ||
-           strings.HasSuffix(path, ".wmv")
+	for _, ext := range constants.VideoExtensions {
+		if strings.HasSuffix(path, "." + ext) {
+			return true
+		}
+	}
+	return false
 }
 
 // IsMediaPath :
