@@ -10,123 +10,106 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
-func init() {
-	rootCmd.AddCommand(newConfigCmd())
+var configCmd = &cobra.Command{
+	Use:   "config",
+	Short: "Configure " + constants.CommandName + " options.",
+	Long:  "Configure " + constants.CommandName + " options.",
+	Args:  cobra.ExactArgs(2),
+	RunE: func(cmd *cobra.Command, args []string) error {
+		return nil
+	},
 }
 
-func newConfigCmd() *cobra.Command {
-	cmd := &cobra.Command {
-		Use:   "config",
-		Short: "Configure " + constants.CommandName + " options.",
-		Long:  "Configure " + constants.CommandName + " options.",
-		Args:  cobra.ExactArgs(2),
-		RunE: func(cmd *cobra.Command, args []string) error {
-			return nil
-		},
-	}
+var overwriteCmd = &cobra.Command{
+	Use:   "overwrite",
+	Short: "Overwrite existing file",
+	Long:  "Overwrite existing file (default: false)",
+	Args:  cobra.ExactArgs(1),
+	RunE:  runOverwriteCmd,
+}
+
+var annotationCmd = &cobra.Command{
+	Use:   "annotation",
+	Short: "Configure file suffix",
+	Long:  "Configure file suffix (default: \"_merged\")",
+	Args:  cobra.ExactArgs(1),
+	RunE:  runAnnotationCmd,
+}
+
+var thresholdCmd = &cobra.Command{
+	Use:   "threshold",
+	Short: "Volume threshold to detect silence",
+	Long:  "Volume threshold to detect silence (default: 50)[dB]",
+	Args:  cobra.ExactArgs(1),
+	RunE:  runThresholdCmd,
+}
+
+var silenceDurationCmd = &cobra.Command{
+	Use:   "silence_duration",
+	Short: "Duration to detect silence",
+	Long:  "Duration to detect silence (default: 5.0)[sec]",
+	Args:  cobra.ExactArgs(1),
+	RunE:  runSilenceDurationCmd,
+}
+
+var blackoutDurationCmd = &cobra.Command{
+	Use:   "blackout_duration",
+	Short: "Duration to detect blackout",
+	Long:  "Duration to detect blackout (default: 5.0)[sec]",
+	Args:  cobra.ExactArgs(1),
+	RunE:  runBlackoutDurationCmd,
+}
+
+func runConfigCmd(cmd *cobra.Command, _ []string) error {
 	cmd.AddCommand(
-		newOverwriteCmd(),
-		newAnnotationCmd(),
-		newThresholdCmd(),
-		newSilenceDurationCmd(),
-		newBlackoutDurationCmd(),
+		overwriteCmd,
+		annotationCmd,
+		thresholdCmd,
+		silenceDurationCmd,
+		blackoutDurationCmd,
 	)
-
-	return cmd
+	return nil
 }
 
-func newOverwriteCmd() *cobra.Command {
-	cmd := &cobra.Command{
-		Use:   "overwrite",
-		Short: "Overwrite existing file",
-		Long:  "Overwrite existing file (default: false)",
-		Args:  cobra.ExactArgs(1),
-		ValidArgsFunction: func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
-			return nil, cobra.ShellCompDirectiveDefault
-		},
-		RunE: func(cmd *cobra.Command, args []string) error {
-			if !util.IsBoolean([]byte(args[0])) {
-				logrus.Errorf("overwrite should use boolean value")
-				os.Exit(1)
-			}
-			return nil
-		},
+func runOverwriteCmd(_ *cobra.Command, args []string) error {
+	if !util.IsBoolean([]byte(args[0])) {
+		logrus.Errorf("overwrite should use boolean value")
+		os.Exit(1)
 	}
-	return cmd
+	// TODO: save annotation config
+	return nil
 }
 
-func newAnnotationCmd() *cobra.Command {
-	cmd := &cobra.Command{
-		Use:   "annotation",
-		Short: "Configure file suffix",
-		Long:  "Configure file suffix (default: \"_merged\")",
-		Args:  cobra.ExactArgs(1),
-		ValidArgsFunction: func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
-			return nil, cobra.ShellCompDirectiveDefault
-		},
-		RunE: func(cmd *cobra.Command, args []string) error {
-			return nil
-		},
+func runAnnotationCmd(_ *cobra.Command, args []string) error {
+	if len(args[0]) > 0 {
+		// TODO: save annotation config
 	}
-	return cmd
+	return nil
 }
 
-func newThresholdCmd() *cobra.Command {
-	cmd := &cobra.Command{
-		Use:   "threshold",
-		Short: "Volume threshold to detect silence",
-		Long:  "Volume threshold to detect silence (default: 50)[dB]",
-		Args:  cobra.ExactArgs(1),
-		ValidArgsFunction: func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
-			return nil, cobra.ShellCompDirectiveDefault
-		},
-		RunE: func(cmd *cobra.Command, args []string) error {
-			if !util.IsInteger([]byte(args[0])) {
-				logrus.Errorf("threshold should use non-negative integer value")
-				os.Exit(1)
-			}
-			return nil
-		},
+func runThresholdCmd(_ *cobra.Command, args []string) error {
+	if !util.IsInteger([]byte(args[0])) {
+		logrus.Errorf("threshold should use non-negative integer value")
+		os.Exit(1)
 	}
-	return cmd
+	// TODO: save threshold config
+	return nil
 }
 
-func newSilenceDurationCmd() *cobra.Command {
-	cmd := &cobra.Command{
-		Use:   "silence_duration",
-		Short: "Duration to detect silence",
-		Long:  "Duration to detect silence (default: 5.0)[sec]",
-		Args:  cobra.ExactArgs(1),
-		ValidArgsFunction: func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
-			return nil, cobra.ShellCompDirectiveDefault
-		},
-		RunE: func(cmd *cobra.Command, args []string) error {
-			if !util.IsInteger([]byte(args[0])) && !util.IsFloat([]byte(args[0])) {
-				logrus.Errorf("silence_duration should use non-negative float value")
-				os.Exit(1)
-			}
-			return nil
-		},
+func runSilenceDurationCmd(_ *cobra.Command, args []string) error {
+	if !util.IsInteger([]byte(args[0])) && !util.IsFloat([]byte(args[0])) {
+		logrus.Errorf("silence_duration should use non-negative float value")
+		os.Exit(1)
 	}
-	return cmd
+	// TODO: save silence_duration config
+	return nil
 }
 
-func newBlackoutDurationCmd() *cobra.Command {
-	cmd := &cobra.Command{
-		Use:   "blackout_duration",
-		Short: "Duration to detect blackout",
-		Long:  "Duration to detect blackout (default: 5.0)[sec]",
-		Args:  cobra.ExactArgs(1),
-		ValidArgsFunction: func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
-			return nil, cobra.ShellCompDirectiveDefault
-		},
-		RunE: func(cmd *cobra.Command, args []string) error {
-			if !util.IsInteger([]byte(args[0])) && !util.IsFloat([]byte(args[0])) {
-				logrus.Errorf("blackout_duration should use non-negative float value")
-				os.Exit(1)
-			}
-			return nil
-		},
+func runBlackoutDurationCmd(_ *cobra.Command, args []string) error {
+	if !util.IsInteger([]byte(args[0])) && !util.IsFloat([]byte(args[0])) {
+		logrus.Errorf("blackout_duration should use non-negative float value")
+		os.Exit(1)
 	}
-	return cmd
+	// TODO: save blackout_duration config
+	return nil
 }
