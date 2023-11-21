@@ -17,19 +17,16 @@ func newBlackoutCmd() *cobra.Command {
 		Long:  "Extract video exclude blackout parts.",
 		Args:  cobra.MinimumNArgs(1),
 		RunE: func(_ *cobra.Command, args []string) error {
-			var path = ""
 			contains, err := util.ContainsMedia(args[0])
 			if err != nil {
 				return constants.ErrInvalidParam
 			}
 
-			if contains {
-				path = args[0]
-			} else {
+			if !contains {
 				os.Exit(1)
 				return constants.ErrInvalidParam
 			}
-			logrus.Debugf("%s", path)
+			logrus.Debugf("%s", args[0])
 
 			return nil
 		},

@@ -19,20 +19,17 @@ func newSilentCmd() *cobra.Command {
 		Long:  "Extract media exclude silent parts.",
 		Args:  cobra.MinimumNArgs(1),
 		RunE:  func (_ *cobra.Command, args []string) error {
-			var path = ""
 			contains, err := util.ContainsMedia(args[0])
 			if err != nil {
 				return constants.ErrInvalidParam
 			}
 
-			if contains {
-				path = args[0]
-			} else {
+			if !contains {
 				os.Exit(1)
 				return constants.ErrInvalidParam
 			}
 
-			m := ui.New(path)
+			m := ui.New(args[0])
 			p := tea.NewProgram(m)
 			if _, err := p.Run(); err != nil {
 				logrus.Errorf("%s: %v", constants.ErrUnexpected, err)
