@@ -23,6 +23,8 @@ go.work
 build/
 dist/
 
+coverage.html
+
 # macOS files
 # General
 .DS_Store
