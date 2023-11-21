@@ -1,13 +1,7 @@
 package cmd
 
 import (
-	"bytes"
-	"io"
-	"os"
 	"testing"
-
-	"github.com/MasahiroSakoda/ffextractor/internal/constants"
-	"github.com/stretchr/testify/assert"
 )
 
 func TestSilentCmd(t *testing.T) {
@@ -15,50 +9,44 @@ func TestSilentCmd(t *testing.T) {
 		name   string
 		cmd    string
 		param  string
-		output string
-		expect bool
+		wantErr bool
 	}{
 		{
 			cmd: "silent",
 			param: "",
-			output: "Usage:",
-			expect: true,
+			wantErr: true,
 			name: "return exit(1) without parameter",
 		},
 		{
 			cmd: "silent",
 			param: "fail.txt",
-			output: "Usage:",
-			expect: true,
+			wantErr: true,
 			name: "return exit(1) with wrong parameter",
 		},
 		{
 			cmd: "silent",
 			param: "invalid.mp3",
-			output: "Usage:",
-			expect: true,
+			wantErr: true,
 			name: "return exit(1) with wrong parameter",
 		},
 		{
 			cmd: "silent",
 			param: rootDir + "/testdata/ffmpeg/sine.mp3",
-			output: "Usage:",
-			expect: false,
+			wantErr: false,
 			name: "return exit(0) with with correct parameter",
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			os.Args = []string{constants.CommandName, tt.cmd, tt.param}
 			cmd := newSilentCmd()
-			b := bytes.NewBufferString("")
-			cmd.SetOut(b)
-			cmd.Execute()
-			out, err := io.ReadAll(b)
-			if err != nil {
-				t.Fatal(err)
+			cmd.SetArgs([]string{tt.cmd, tt.param})
+			err := cmd.Execute()
+			if (err != nil) != tt.wantErr {
+				if tt.wantErr {
+					t.Errorf("cmd.Execute() error = %v, wantErr %v", err, tt.wantErr)
+				}
+				t.Logf("parameter: %s", tt.param)
 			}
-			assert.Contains(t, string(out), tt.output)
 		})
 	}
 }

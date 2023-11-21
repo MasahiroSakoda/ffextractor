@@ -46,7 +46,12 @@ func TestConfigCmd(t *testing.T) {
 			cmd.SetArgs([]string{tt.key, tt.value})
 			b := bytes.NewBufferString("")
 			cmd.SetOut(b)
-			cmd.Execute()
+			err := cmd.Execute()
+			if (err != nil) != tt.wantErr {
+				if tt.wantErr {
+					t.Errorf("cmd.Execute() error = %v, wantErr %v", err, tt.wantErr)
+				}
+			}
 			o, err := io.ReadAll(b)
 			if err != nil {
 				t.Errorf("io.ReadAll() error: %v", err)

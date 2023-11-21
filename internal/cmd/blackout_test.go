@@ -16,34 +16,34 @@ func TestBlackoutCmd(t *testing.T) {
 		cmd    string
 		param  string
 		output string
-		expect bool
+		wantErr bool
 	}{
 		{
 			cmd: "blackout",
 			param: "",
 			output: "Usage:",
-			expect: true,
+			wantErr: true,
 			name: "return exit(1) without parameter",
 		},
 		{
 			cmd: "blackout",
 			param: "fail.txt",
 			output: "Usage:",
-			expect: true,
+			wantErr: true,
 			name: "return exit(1) with wrong parameter",
 		},
 		{
 			cmd: "blackout",
 			param: "invalid.mp3",
 			output: "Usage:",
-			expect: true,
+			wantErr: true,
 			name: "return exit(1) with wrong parameter",
 		},
 		{
 			cmd: "blackout",
 			param: rootDir + "/testdata/ffmpeg/sine.mp3",
 			output: "Usage:",
-			expect: false,
+			wantErr: false,
 			name: "return exit(0) with with correct parameter",
 		},
 	}
@@ -53,7 +53,12 @@ func TestBlackoutCmd(t *testing.T) {
 			cmd := newBlackoutCmd()
 			b := bytes.NewBufferString("")
 			cmd.SetOut(b)
-			cmd.Execute()
+			err := cmd.Execute()
+			if (err != nil) != tt.wantErr {
+				if tt.wantErr {
+					t.Errorf("cmd.Execute() error = %v, wantErr %v", err, tt.wantErr)
+				}
+			}
 			out, err := io.ReadAll(b)
 			if err != nil {
 				t.Fatal(err)
