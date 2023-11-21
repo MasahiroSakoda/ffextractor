@@ -19,6 +19,7 @@ var subCmds = []string{
 	"silent",
 	"blackout",
 	"config",
+	"completion",
 }
 
 var rootCmd = &cobra.Command{
@@ -54,8 +55,10 @@ func init() {
 	}
 
 	for _, cmd := range []*cobra.Command{
-		silentCmd,
-		blackoutCmd,
+		newSilentCmd(),
+		newBlackoutCmd(),
+		newConfigCmd(),
+		newCompletionCmd(),
 	} {
 		rootCmd.AddCommand(cmd)
 	}

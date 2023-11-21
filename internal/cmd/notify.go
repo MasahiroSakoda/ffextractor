@@ -10,6 +10,7 @@ import (
 	"github.com/google/go-github/v55/github"
 
 	"github.com/MasahiroSakoda/ffextractor/internal/cache"
+	"github.com/MasahiroSakoda/ffextractor/internal/constants"
 	"github.com/MasahiroSakoda/ffextractor/internal/styles"
 	"github.com/MasahiroSakoda/ffextractor/internal/util"
 )
@@ -32,7 +33,7 @@ func notifyNewRelease(w io.Writer) error {
 	} else {
 		// Retrieve the latest release and save cache.
 		cl := github.NewClient(nil)
-		r, _, err := cl.Repositories.GetLatestRelease(context.Background(), "koki-develop", "clive")
+		r, _, err := cl.Repositories.GetLatestRelease(context.Background(), "MasahiroSakoda", constants.CommandName)
 		if err != nil {
 			return err
 		}
