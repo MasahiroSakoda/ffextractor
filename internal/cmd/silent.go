@@ -12,35 +12,35 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var silentCmd = &cobra.Command{
-	Use:   "silent",
-	Short: "Extract media exclude silent parts.",
-	Long:  "Extract media exclude silent parts.",
-	Args:  cobra.MinimumNArgs(1),
-	RunE:  extractExcludeSilence,
-}
+func newSilentCmd() *cobra.Command {
+	return &cobra.Command{
+		Use:   "silent",
+		Short: "Extract media exclude silent parts.",
+		Long:  "Extract media exclude silent parts.",
+		Args:  cobra.MinimumNArgs(1),
+		RunE:  func (_ *cobra.Command, args []string) error {
+			var path = ""
+			contains, err := util.ContainsMedia(args[0])
+			if err != nil {
+				return constants.ErrInvalidParam
+			}
 
-func extractExcludeSilence(_ *cobra.Command, args []string) error {
-	var path = ""
-	contains, err := util.ContainsMedia(args[0])
-	if err != nil {
-		return constants.ErrInvalidParam
+			if contains {
+				path = args[0]
+			} else {
+				os.Exit(1)
+				return constants.ErrInvalidParam
+			}
+
+			m := ui.New(path)
+			p := tea.NewProgram(m)
+			if _, err := p.Run(); err != nil {
+				logrus.Errorf("%s: %v", constants.ErrUnexpected, err)
+				os.Exit(1)
+			}
+			p.Quit()
+
+			return nil
+		},
 	}
-
-	if contains {
-		path = args[0]
-	} else {
-		os.Exit(1)
-		return constants.ErrInvalidParam
-	}
-
-	m := ui.New(path)
-	p := tea.NewProgram(m)
-	if _, err := p.Run(); err != nil {
-		logrus.Errorf("%s: %v", constants.ErrUnexpected, err)
-		os.Exit(1)
-	}
-	p.Quit()
-
-	return nil
 }
