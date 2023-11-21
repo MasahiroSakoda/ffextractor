@@ -19,6 +19,7 @@ var subCmds = []string{
 	"silent",
 	"blackout",
 	"config",
+	"completion",
 }
 
 var rootCmd = &cobra.Command{
@@ -53,25 +54,11 @@ func init() {
 		logrus.Fatalf("cli: failed to load config")
 	}
 
-	configCmd.AddCommand(
-		overwriteCmd,
-		annotationCmd,
-		thresholdCmd,
-		silenceDurationCmd,
-		blackoutDurationCmd,
-	)
-
-	completionCmd.AddCommand(
-		completionBashCmd,
-		completionZshCmd,
-		completionFishCmd,
-	)
-
 	for _, cmd := range []*cobra.Command{
-		silentCmd,
-		blackoutCmd,
-		completionCmd,
-		configCmd,
+		newSilentCmd(),
+		newBlackoutCmd(),
+		newConfigCmd(),
+		newCompletionCmd(),
 	} {
 		rootCmd.AddCommand(cmd)
 	}
