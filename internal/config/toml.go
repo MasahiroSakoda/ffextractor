@@ -15,17 +15,17 @@ var Root = &Config{}
 
 var defaultConfig = &Config{
 	File: FileSection{
-		Overwrite:  false,
-		Annotation: "_merged",
+		Overwrite:  constants.DefaultOverwrite,
+		Annotation: constants.DefaultAnnotation,
 	},
 	Extract: ExtractSection{
-		Threshold:       -10,
-		SilenceDuration:  10.000,
-		BlackoutDuration: 10.000,
+		Threshold:        constants.DefaultThreshold,
+		SilenceDuration:  constants.DefaultSilenceDuration,
+		BlackoutDuration: constants.DefaultBlackoutDuration,
 	},
 	Encode: EncodeSection{
-		SplitWithEncode:  true,
-		ConcatWithEncode: true,
+		SplitWithEncode:  constants.DefaultSplitWithEncode,
+		ConcatWithEncode: constants.DefaultConcatWithEncode,
 	},
 }
 

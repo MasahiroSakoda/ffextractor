@@ -6,3 +6,7 @@ annotation = '_merged'
 threshold = -50
 silence_duration = 4.5
 blackout_duration = 5.5
+
+[encode]
+split_with_encode = true
+concat_with_encode = true
