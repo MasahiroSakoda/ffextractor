@@ -1,115 +1,90 @@
 package cmd
 
 import (
-	"os"
+	"strconv"
+	"strings"
+
+	c "github.com/MasahiroSakoda/ffextractor/internal/constants"
+	"github.com/MasahiroSakoda/ffextractor/internal/config"
+	"github.com/MasahiroSakoda/ffextractor/internal/util"
 
 	"github.com/spf13/cobra"
-
-	"github.com/MasahiroSakoda/ffextractor/internal/constants"
-	"github.com/MasahiroSakoda/ffextractor/internal/util"
-	"github.com/sirupsen/logrus"
 )
 
-var configCmd = &cobra.Command{
-	Use:   "config",
-	Short: "Configure " + constants.CommandName + " options.",
-	Long:  "Configure " + constants.CommandName + " options.",
-	Args:  cobra.ExactArgs(2),
-	RunE: func(cmd *cobra.Command, args []string) error {
-		return cmd.Help()
-	},
-}
-
-var overwriteCmd = &cobra.Command{
-	Use:   "overwrite",
-	Short: "Overwrite existing file",
-	Long:  "Overwrite existing file (default: false)",
-	Args:  cobra.ExactArgs(1),
-	RunE:  runOverwriteCmd,
-}
-
-var annotationCmd = &cobra.Command{
-	Use:   "annotation",
-	Short: "Configure file suffix",
-	Long:  "Configure file suffix (default: \"_merged\")",
-	Args:  cobra.ExactArgs(1),
-	RunE:  runAnnotationCmd,
-}
-
-var thresholdCmd = &cobra.Command{
-	Use:   "threshold",
-	Short: "Volume threshold to detect silence",
-	Long:  "Volume threshold to detect silence (default: 50)[dB]",
-	Args:  cobra.ExactArgs(1),
-	RunE:  runThresholdCmd,
-}
-
-var silenceDurationCmd = &cobra.Command{
-	Use:   "silence_duration",
-	Short: "Duration to detect silence",
-	Long:  "Duration to detect silence (default: 5.0)[sec]",
-	Args:  cobra.ExactArgs(1),
-	RunE:  runSilenceDurationCmd,
-}
-
-var blackoutDurationCmd = &cobra.Command{
-	Use:   "blackout_duration",
-	Short: "Duration to detect blackout",
-	Long:  "Duration to detect blackout (default: 5.0)[sec]",
-	Args:  cobra.ExactArgs(1),
-	RunE:  runBlackoutDurationCmd,
-}
-
-func runConfigCmd(cmd *cobra.Command, _ []string) error {
-	cmd.AddCommand(
-		overwriteCmd,
-		annotationCmd,
-		thresholdCmd,
-		silenceDurationCmd,
-		blackoutDurationCmd,
-	)
-	return nil
-}
-
-func runOverwriteCmd(_ *cobra.Command, args []string) error {
-	if !util.IsBoolean([]byte(args[0])) {
-		logrus.Errorf("overwrite should use boolean value")
-		os.Exit(1)
+func newConfigCmd() *cobra.Command {
+	var options = []string{
+		c.ConfigOverwrite,
+		c.ConfigAnnotation,
+		c.ConfigThreshold,
+		c.ConfigSilenceDuration,
+		c.ConfigBlackoutDuration,
+		c.ConfigSplitWithEncode,
+		c.ConfigConcatWithEncode,
 	}
-	// TODO: save annotation config
-	return nil
-}
+	return &cobra.Command{
+		Use:   "config",
+		Short: "Configure " + c.CommandName + " options.",
+		Long:  "Configure " + c.CommandName + " options.",
+		Args:  cobra.MatchAll(cobra.ExactArgs(2), cobra.OnlyValidArgs),
+		ValidArgs: options,
+		RunE: func(_ *cobra.Command, args []string) error {
+			field := strings.ToLower(args[0])
+			value := args[1]
 
-func runAnnotationCmd(_ *cobra.Command, args []string) error {
-	if len(args[0]) > 0 {
-		// TODO: save annotation config
-	}
-	return nil
-}
+			root       := config.Root
+			fileCfg    := root.File
+			extractCfg := root.Extract
+			encodeCfg  := root.Encode
 
-func runThresholdCmd(_ *cobra.Command, args []string) error {
-	if !util.IsInteger([]byte(args[0])) {
-		logrus.Errorf("threshold should use non-negative integer value")
-		os.Exit(1)
+			switch field {
+			case c.ConfigOverwrite:
+				overwrite, err := util.ParseBoolean([]byte(value))
+				if err != nil {
+					return err
+				}
+				fileCfg.Overwrite = overwrite
+			case c.ConfigAnnotation:
+				fileCfg.Annotation = value
+			case c.ConfigThreshold:
+				threshold, err := util.ParseInteger([]byte(value))
+				if err != nil {
+					return err
+				}
+				extractCfg.Threshold = threshold
+			case c.ConfigSilenceDuration:
+				duration, err := strconv.ParseFloat(value, 64)
+				if err != nil {
+					return err
+				}
+				extractCfg.SilenceDuration = duration
+			case c.ConfigBlackoutDuration:
+				duration, err := strconv.ParseFloat(value, 64)
+				if err != nil {
+					return err
+				}
+				extractCfg.BlackoutDuration = duration
+			case c.ConfigSplitWithEncode:
+				encode, err := util.ParseBoolean([]byte(value))
+				if err != nil {
+					return err
+				}
+				encodeCfg.SplitWithEncode = encode
+			case c.ConfigConcatWithEncode:
+				encode, err := util.ParseBoolean([]byte(value))
+				if err != nil {
+					return err
+				}
+				encodeCfg.SplitWithEncode = encode
+			}
+			configPath, err := util.GetConfigFilePath()
+			if err != nil {
+				return err
+			}
+			err = root.Save(configPath)
+			if err != nil {
+				return err
+			}
+			return nil
+		},
 	}
-	// TODO: save threshold config
-	return nil
-}
-
-func runSilenceDurationCmd(_ *cobra.Command, args []string) error {
-	if !util.IsInteger([]byte(args[0])) && !util.IsFloat([]byte(args[0])) {
-		logrus.Errorf("silence_duration should use non-negative float value")
-		os.Exit(1)
-	}
-	// TODO: save silence_duration config
-	return nil
-}
-
-func runBlackoutDurationCmd(_ *cobra.Command, args []string) error {
-	if !util.IsInteger([]byte(args[0])) && !util.IsFloat([]byte(args[0])) {
-		logrus.Errorf("blackout_duration should use non-negative float value")
-		os.Exit(1)
-	}
-	// TODO: save blackout_duration config
-	return nil
 }
