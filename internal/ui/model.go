@@ -1,12 +1,9 @@
 package ui
 
 import (
-	"strconv"
 	"time"
 
-	"github.com/MasahiroSakoda/ffextractor/internal/constants"
-	"github.com/MasahiroSakoda/ffextractor/internal/util"
-	"github.com/MasahiroSakoda/ffextractor/internal/ffmpeg"
+	"github.com/MasahiroSakoda/ffextractor/internal/segment"
 	"github.com/MasahiroSakoda/ffextractor/internal/styles"
 
 	"github.com/charmbracelet/bubbles/spinner"
@@ -32,9 +29,11 @@ type Model struct {
 }
 
 type tickMsg time.Time
+type errMsg struct { err error}
 type silenceDetectedMsg struct {
-	rows []table.Row
+	segments []segment.Model
 }
+type splitProcessingMsg struct {}
 
 var (
 	_ tea.Model = (*Model)(nil)
@@ -60,16 +59,9 @@ func columns() []table.Column {
 func (m *Model) Init() tea.Cmd {
 	return tea.Batch(
 		tickEvery(),
-		m.fetchSilenceSegments,
 		m.spinner.Tick,
+		m.fetchSilenceSegments,
 	)
-}
-
-// tickEvery : update every time
-func tickEvery() tea.Cmd {
-	return tea.Tick(time.Millisecond, func(t time.Time) tea.Msg {
-		return tickMsg(t)
-	})
 }
 
 // New : initialize model
@@ -83,28 +75,8 @@ func New(path string) *Model {
 		table: table.New(
 			table.WithColumns(columns()),
 			table.WithRows(make([]table.Row, 0)),
-			table.WithFocused(false),
-			table.WithHeight(8),
+			table.WithFocused(true),
+			table.WithHeight(10),
 		),
 	}
-}
-
-func (m *Model) fetchSilenceSegments() tea.Msg {
-	segments, err := ffmpeg.DetectSilence(m.path)
-	if err != nil {
-		return constants.ErrSilenceDetect
-	}
-
-	var rows []table.Row
-	for i, segment := range segments {
-		var row = table.Row{
-			strconv.Itoa(i + 1),
-			util.GetFilenameFromPath(segment.Filename),
-			strconv.FormatFloat(segment.Start,    'f', -1, 64),
-			strconv.FormatFloat(segment.End,      'f', -1, 64),
-			strconv.FormatFloat(segment.Duration, 'f', -1, 64),
-		}
-		rows = append(rows, row)
-	}
-	return silenceDetectedMsg{rows: rows}
 }

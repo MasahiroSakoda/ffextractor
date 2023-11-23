@@ -1,7 +1,17 @@
 package ui
 
 import (
+	"os"
+	"strconv"
+	"time"
+
+	"github.com/MasahiroSakoda/ffextractor/internal/constants"
+	"github.com/MasahiroSakoda/ffextractor/internal/ffmpeg"
+	"github.com/MasahiroSakoda/ffextractor/internal/segment"
+	"github.com/MasahiroSakoda/ffextractor/internal/util"
+
 	"github.com/charmbracelet/bubbles/spinner"
+	"github.com/charmbracelet/bubbles/table"
 	tea "github.com/charmbracelet/bubbletea"
 )
 
@@ -21,29 +31,97 @@ func (m *Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	cmds = append(cmds, cmd)
 
 	switch msg := msg.(type) {
-	case spinner.TickMsg:
-		switch {
-		case m.loading:
-			m.spinner, cmd = m.spinner.Update(msg)
-			cmds = append(cmds, cmd)
+
+	// update every time
+	case tickMsg:
+		tickEvery()
+
+	case errMsg:
+		if msg.err != nil {
+			return m, tea.Quit
 		}
-	case silenceDetectedMsg:
-		m.loading = false
-		m.table.SetRows(msg.rows)
 
 	case tea.WindowSizeMsg:
 		m.termWidth, m.termHeight = msg.Width, msg.Height
 		return m, nil
-	case tickMsg:
-		tickEvery()
+
 	// key
 	case tea.KeyMsg:
 		switch msg.String() {
 		case "ctrl+c", "q", "esc":
 			return m, tea.Quit
 		}
-	default:
-		return m, tea.Batch(cmds...)
+
+	// spinner
+	case spinner.TickMsg:
+		switch {
+		case m.loading:
+			m.spinner, cmd = m.spinner.Update(msg)
+			cmds = append(cmds, cmd)
+		}
+
+	// after silence detected
+	case silenceDetectedMsg:
+		m.loading = false
+		m.makeTableRows(msg.segments)
+
+		// create temp directory
+		dirPrefix := constants.CommandName + "_"
+		tempDir, err := os.MkdirTemp("", dirPrefix)
+		errorDetected(err)
+		defer func() {
+			os.RemoveAll(tempDir)
+		}()
+
+		for i, segment := range msg.segments {
+			m.table.SetCursor(i)
+			err := ffmpeg.SplitDetectedSegment(segment, tempDir)
+			errorDetected(err)
+		}
+		m.table.Blur()
+
+	// msg for split detected segments
+	case splitProcessingMsg:
 	}
+
 	return m, tea.Batch(cmds...)
+}
+
+// tickEvery : update every time
+func tickEvery() tea.Cmd {
+	return tea.Tick(time.Millisecond, func(t time.Time) tea.Msg {
+		return tickMsg(t)
+	})
+}
+
+func errorDetected(e error) tea.Msg {
+	if e != nil {
+		return errMsg{err: e}
+	}
+	return nil
+}
+
+// fetchSilenceSegments return message to detect silence / blackout segments
+func (m *Model) fetchSilenceSegments() tea.Msg {
+	segments, err := ffmpeg.DetectSilence(m.path)
+	if err != nil {
+		return errMsg{err: constants.ErrSilenceDetect}
+	}
+	return silenceDetectedMsg{segments: segments}
+}
+
+// makeTableRows makes table using detected segments
+func (m *Model) makeTableRows(segments []segment.Model) {
+	var rows []table.Row
+	for i, segment := range segments {
+		var row = table.Row{
+			strconv.Itoa(i + 1),
+			util.GetFilenameFromPath(segment.Input),
+			strconv.FormatFloat(segment.Start,    'f', -1, 64),
+			strconv.FormatFloat(segment.End,      'f', -1, 64),
+			strconv.FormatFloat(segment.Duration, 'f', -1, 64),
+		}
+		rows = append(rows, row)
+	}
+	m.table.SetRows(rows)
 }
