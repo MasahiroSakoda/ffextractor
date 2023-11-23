@@ -2,7 +2,6 @@ package ffmpeg
 
 import (
 	"fmt"
-	"os/exec"
 	"path/filepath"
 	"strconv"
 
@@ -25,10 +24,11 @@ func SplitDetectedSegment(segment segment.Model, tempDir string) error {
 		args = append(args, "-c", "copy")
 	}
 	args = append(args, output)
-	output, err := exec.Command("ffmpeg", args...).CombinedOutput()
-	if err != nil {
-		return err
-	}
-	fmt.Println(string(output))
+	fmt.Println(args)
+	// output, err := exec.Command("ffmpeg", args...).CombinedOutput()
+	// if err != nil {
+	// 	return err
+	// }
+	// fmt.Println(string(output))
 	return nil
 }
