@@ -10,6 +10,7 @@ PLATFORMS := darwin linux
 
 GOBIN     := go
 GOBUILD   := ${GOBIN} build
+GORUN     := ${GOBIN} run
 GOCLEAN   := ${GOBIN} clean
 GOTEST    := ${GOBIN} test
 GOGET     := ${GOBIN} get
@@ -35,7 +36,7 @@ deps:
 
 .PHONY: build
 build:
-	${GOBIN} build .
+	${GOBUILD} .
 
 .PHONY: build-all
 # TODO: build for all OS & arch
@@ -46,8 +47,8 @@ install: build
 	cp ${BIN_NAME} ${DIST_PATH}
 
 .PHONY: run
-run: build
-	./${BIN_NAME}
+run:
+	${GORUN} main.go
 
 .PHONY: test
 test:
