@@ -6,7 +6,7 @@ import (
 	"time"
 
 	"github.com/MasahiroSakoda/ffextractor/internal/constants"
-	"github.com/MasahiroSakoda/ffextractor/internal/ffmpeg"
+	"github.com/MasahiroSakoda/ffextractor/internal/extractor"
 	"github.com/MasahiroSakoda/ffextractor/internal/segment"
 	"github.com/MasahiroSakoda/ffextractor/internal/util"
 
@@ -75,7 +75,7 @@ func (m *Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 		for i, segment := range msg.segments {
 			m.table.SetCursor(i)
-			err := ffmpeg.SplitDetectedSegment(segment, tempDir)
+			err := extractor.SplitDetectedSegment(segment, tempDir)
 			errorDetected(err)
 		}
 		m.table.Blur()
@@ -103,7 +103,7 @@ func errorDetected(e error) tea.Msg {
 
 // fetchSilenceSegments return message to detect silence / blackout segments
 func (m *Model) fetchSilenceSegments() tea.Msg {
-	segments, err := ffmpeg.DetectSilence(m.path)
+	segments, err := extractor.DetectSilence(m.path)
 	if err != nil {
 		return errMsg{err: constants.ErrSilenceDetect}
 	}
