@@ -1,7 +1,6 @@
 package cmd
 
 import (
-	"os"
 	"path/filepath"
 
 	"github.com/MasahiroSakoda/ffextractor/internal/constants"
@@ -29,7 +28,7 @@ func newSilentCmd() *cobra.Command {
 			p := tea.NewProgram(m)
 			if _, err := p.Run(); err != nil {
 				logrus.Errorf("%s: %v", constants.ErrUnexpected, err)
-				os.Exit(1)
+				return err
 			}
 			p.Quit()
 
