@@ -1,8 +1,14 @@
 package cmd
 
 import (
+	"path/filepath"
 	"testing"
 )
+
+func testDataPath(filename string) string {
+	absPath, _ := filepath.Abs("../../testdata/ffmpeg/" + filename)
+	return filepath.Clean(absPath)
+}
 
 func TestSilentCmd(t *testing.T) {
 	tests := []struct{
@@ -19,7 +25,7 @@ func TestSilentCmd(t *testing.T) {
 		},
 		{
 			cmd: "silent",
-			param: rootDir + "fail.txt",
+			param: testDataPath("fail.txt"),
 			wantErr: true,
 			name: "return invalid parameter with file does not exist",
 		},
@@ -31,13 +37,13 @@ func TestSilentCmd(t *testing.T) {
 		},
 		{
 			cmd: "silent",
-			param: rootDir + "/testdata/ffmpeg/sine.mp3",
+			param: testDataPath("sine.mp3"),
 			wantErr: false,
 			name: "not detected with with noisy file",
 		},
 		{
 			cmd: "silent",
-			param: rootDir + "/testdata/ffmpeg/mixed.mp3",
+			param: testDataPath("mixed.mp3"),
 			wantErr: false,
 			name: "return exit(0) with with correct parameter",
 		},
