@@ -1,13 +1,15 @@
 package extractor
 
 import (
+	"path/filepath"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
 )
 
 func testDataPath(filename string) string {
-	return "./testdata/ffmpeg/" + filename
+	absPath, _ := filepath.Abs("../../testdata/ffmpeg/" + filename)
+	return filepath.Clean(absPath)
 }
 
 func TestDetectSilentSegments(t *testing.T) {
