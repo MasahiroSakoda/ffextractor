@@ -10,7 +10,7 @@ func testDataPath(filename string) string {
 	return "./testdata/ffmpeg/" + filename
 }
 
-func TestDetectSilence(t *testing.T) {
+func TestDetectSilentSegments(t *testing.T) {
 	tests := []struct {
 		file    string
 		name    string
@@ -23,7 +23,7 @@ func TestDetectSilence(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, err := DetectSilence(testDataPath(tt.file))
+			got, err := DetectSilentSegments(testDataPath(tt.file))
 			if err != nil {
 				assert.Error(t, err)
 			} else {

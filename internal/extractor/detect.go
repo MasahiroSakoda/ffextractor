@@ -1,32 +1,38 @@
 package extractor
 
 import (
-	"os/exec"
+	"bytes"
+	// "context"
 	"fmt"
 	"path/filepath"
-	"strings"
 	"strconv"
+	"strings"
 
 	"github.com/MasahiroSakoda/ffextractor/internal/config"
-	"github.com/MasahiroSakoda/ffextractor/internal/constants"
 	"github.com/MasahiroSakoda/ffextractor/internal/segment"
 	"github.com/MasahiroSakoda/ffextractor/internal/util"
+
+	fg "github.com/u2takey/ffmpeg-go"
 )
 
-func DetectSilence(src string) ([]segment.Model, error) {
+// DetectSilentSegments returns silent segments with configured values
+func DetectSilentSegments(src string) ([]segment.Model, error) {
+	src = filepath.Clean(src)
 	extract   := config.Root.Extract
 	threshold := extract.Threshold
 	duration  := extract.SilenceDuration
 
-	args := []string{
-		"-i", src,
-		"-af", fmt.Sprintf("silencedetect=noise=%ddB:d=%2.3f", threshold, duration),
-		"-f", "null", "-"}
-	output, err := exec.Command("ffmpeg", args...).CombinedOutput()
-	if err != nil {
-		return []segment.Model{}, err
-	}
-	return parseDetectedSegments(src, output)
+	out := bytes.Buffer{}
+	arg := fmt.Sprintf("silencedetect=noise=%ddB:d=%2.3f", threshold, duration)
+
+	// TODO: cancel interruption with context
+	err := fg.Input(src).
+			Output("-", fg.KwArgs{"af": arg, "f": "null"}).
+			WithOutput(&out, &out). // Capture Stdout
+			// Compile().
+			Run()
+	if err != nil { return nil, err }
+	return parseDetectedSegments(src, out.Bytes())
 }
 
 func parseDetectedSegments(src string, data []byte) (segments []segment.Model, err error) {
@@ -44,10 +50,12 @@ func parseDetectedSegments(src string, data []byte) (segments []segment.Model, e
 					segments = append(segments, s)
 				}
 				s.Start  = seconds + correction
+				base    := filepath.Base(s.Input)
+				ext     := filepath.Ext(base)
 				s.Output = fmt.Sprintf("%s_%s%s",
-					constants.CommandName,
+					strings.TrimSuffix(base, ext),
 					strconv.FormatFloat(s.Start, 'f', -1, 64),
-					filepath.Ext(s.Input),
+					ext,
 				)
 			} else {
 				fmt.Printf("%s", err)
@@ -81,7 +89,7 @@ func parseDetectedSegments(src string, data []byte) (segments []segment.Model, e
 	}
 	if i == 0 {
 		err = fmt.Errorf("could not find any segments")
-		return
+		return []segment.Model{}, err
 	}
 
 	newSegments = newSegments[:i]
