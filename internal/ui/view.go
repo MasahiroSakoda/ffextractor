@@ -15,5 +15,5 @@ func (m *Model) View() string {
 	return "\n" +
 		loadingMessage + "\n" +
 		m.table.View() + "\n" +
-		pad + helpStyle("Press any key to quit") + "\n"
+		pad + helpStyle("Press \"esc\" or \"q\" key to quit") + "\n"
 }

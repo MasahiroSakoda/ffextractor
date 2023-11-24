@@ -2,11 +2,12 @@ package ui
 
 import (
 	"os"
+	"fmt"
 	"strconv"
 	"time"
 
 	"github.com/MasahiroSakoda/ffextractor/internal/constants"
-	"github.com/MasahiroSakoda/ffextractor/internal/ffmpeg"
+	"github.com/MasahiroSakoda/ffextractor/internal/extractor"
 	"github.com/MasahiroSakoda/ffextractor/internal/segment"
 	"github.com/MasahiroSakoda/ffextractor/internal/util"
 
@@ -38,6 +39,7 @@ func (m *Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 	case errMsg:
 		if msg.err != nil {
+			fmt.Println(msg.err)
 			return m, tea.Quit
 		}
 
@@ -75,7 +77,7 @@ func (m *Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 		for i, segment := range msg.segments {
 			m.table.SetCursor(i)
-			err := ffmpeg.SplitDetectedSegment(segment, tempDir)
+			err := extractor.SplitDetectedSegment(segment, tempDir)
 			errorDetected(err)
 		}
 		m.table.Blur()
@@ -101,15 +103,6 @@ func errorDetected(e error) tea.Msg {
 	return nil
 }
 
-// fetchSilenceSegments return message to detect silence / blackout segments
-func (m *Model) fetchSilenceSegments() tea.Msg {
-	segments, err := ffmpeg.DetectSilence(m.path)
-	if err != nil {
-		return errMsg{err: constants.ErrSilenceDetect}
-	}
-	return silenceDetectedMsg{segments: segments}
-}
-
 // makeTableRows makes table using detected segments
 func (m *Model) makeTableRows(segments []segment.Model) {
 	var rows []table.Row
@@ -124,4 +117,13 @@ func (m *Model) makeTableRows(segments []segment.Model) {
 		rows = append(rows, row)
 	}
 	m.table.SetRows(rows)
+}
+
+// fetchSilenceSegments return message to detect silence segments
+func (m *Model) fetchSilenceSegments() tea.Msg {
+	segments, err := extractor.DetectSilentSegments(m.path)
+	if err != nil {
+		return errMsg{err: constants.ErrSilenceDetect}
+	}
+	return silenceDetectedMsg{segments: segments}
 }
