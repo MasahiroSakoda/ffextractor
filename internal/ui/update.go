@@ -81,6 +81,7 @@ func (m *Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			errorDetected(err)
 		}
 		m.table.Blur()
+		return m, tea.Quit
 
 	// msg for split detected segments
 	case splitProcessingMsg:

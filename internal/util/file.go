@@ -49,15 +49,16 @@ func IsMediaPath(path string) bool {
 }
 
 // ContainsMedia :
-func ContainsMedia(path string) (bool, error) {
+func ContainsMedia(path string) bool {
 	isMedia := false
-	err := filepath.WalkDir(path, func(p  string, _ fs.DirEntry, err error) error {
-		if IsMediaPath(p) {
+	_ = filepath.WalkDir(path, func(p  string, d fs.DirEntry, err error) error {
+		info, _ := d.Info()
+		if !info.IsDir() && IsMediaPath(p) {
 			isMedia = true
 		}
-		return err
+		return nil
 	})
-	return isMedia, err
+	return isMedia
 }
 
 // IsExecutable returns whether a file has execution permissions

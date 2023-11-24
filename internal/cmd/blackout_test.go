@@ -3,10 +3,8 @@ package cmd
 import (
 	"bytes"
 	"io"
-	"os"
 	"testing"
 
-	"github.com/MasahiroSakoda/ffextractor/internal/constants"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -27,30 +25,30 @@ func TestBlackoutCmd(t *testing.T) {
 		},
 		{
 			cmd: "blackout",
-			param: "fail.txt",
+			param: rootDir + "fail.txt",
 			output: "Usage:",
 			wantErr: true,
-			name: "return exit(1) with wrong parameter",
+			name: "return invalid parameter with file does not exist",
 		},
 		{
 			cmd: "blackout",
 			param: "invalid.mp3",
 			output: "Usage:",
 			wantErr: true,
-			name: "return exit(1) with wrong parameter",
+			name: "return invalid parameter with media file does not exist",
 		},
 		{
 			cmd: "blackout",
 			param: rootDir + "/testdata/ffmpeg/sine.mp3",
-			output: "Usage:",
+			output: "",
 			wantErr: false,
 			name: "return exit(0) with with correct parameter",
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			os.Args = []string{constants.CommandName, tt.cmd, tt.param}
 			cmd := newBlackoutCmd()
+			cmd.SetArgs([]string{tt.param})
 			b := bytes.NewBufferString("")
 			cmd.SetOut(b)
 			err := cmd.Execute()
