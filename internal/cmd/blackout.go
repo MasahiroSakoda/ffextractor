@@ -1,7 +1,7 @@
 package cmd
 
 import (
-	"os"
+	"path/filepath"
 
 	"github.com/MasahiroSakoda/ffextractor/internal/constants"
 	"github.com/MasahiroSakoda/ffextractor/internal/util"
@@ -17,13 +17,8 @@ func newBlackoutCmd() *cobra.Command {
 		Long:  "Extract video exclude blackout parts.",
 		Args:  cobra.MinimumNArgs(1),
 		RunE: func(_ *cobra.Command, args []string) error {
-			contains, err := util.ContainsMedia(args[0])
-			if err != nil {
-				return constants.ErrInvalidParam
-			}
-
-			if !contains {
-				os.Exit(1)
+			path := filepath.Clean(args[0])
+			if !util.IsMediaPath(path) || !util.Exists(path) {
 				return constants.ErrInvalidParam
 			}
 			logrus.Debugf("%s", args[0])
