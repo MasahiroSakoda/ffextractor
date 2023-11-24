@@ -17,8 +17,9 @@ import (
 
 // DetectSilentSegments returns silent segments with configured values
 func DetectSilentSegments(src string) ([]segment.Model, error) {
-	src = filepath.Clean(src)
-	extract   := config.Root.Extract
+	root, err := config.Root.Load("")
+	if err != nil { return nil, err }
+	extract   := root.Extract
 	threshold := extract.Threshold
 	duration  := extract.SilenceDuration
 
@@ -26,7 +27,8 @@ func DetectSilentSegments(src string) ([]segment.Model, error) {
 	arg := fmt.Sprintf("silencedetect=noise=%ddB:d=%2.3f", threshold, duration)
 
 	// TODO: cancel interruption with context
-	err := fg.Input(src).
+	src = filepath.Clean(src)
+	err = fg.Input(src).
 			Output("-", fg.KwArgs{"af": arg, "f": "null"}).
 			WithOutput(&out, &out). // Capture Stdout
 			// Compile().
