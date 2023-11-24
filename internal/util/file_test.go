@@ -96,12 +96,8 @@ func TestContainsMedia(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, err := ContainsMedia(tt.path)
-			if err != nil {
-				t.Errorf("failed to read directory")
-			} else {
-				assert.Equal(t, tt.expect, got)
-			}
+			got := ContainsMedia(tt.path)
+			assert.Equal(t, tt.expect, got)
 		})
 	}
 }
