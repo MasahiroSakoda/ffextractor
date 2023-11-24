@@ -12,21 +12,11 @@ import (
 )
 
 func newConfigCmd() *cobra.Command {
-	var options = []string{
-		c.ConfigOverwrite,
-		c.ConfigAnnotation,
-		c.ConfigThreshold,
-		c.ConfigSilenceDuration,
-		c.ConfigBlackoutDuration,
-		c.ConfigSplitWithEncode,
-		c.ConfigConcatWithEncode,
-	}
 	return &cobra.Command{
 		Use:   "config",
 		Short: "Configure " + c.CommandName + " options.",
 		Long:  "Configure " + c.CommandName + " options.",
-		Args:  cobra.MatchAll(cobra.ExactArgs(2), cobra.OnlyValidArgs),
-		ValidArgs: options,
+		Args:  cobra.MatchAll(cobra.ExactArgs(2)),
 		RunE: func(_ *cobra.Command, args []string) error {
 			field := strings.ToLower(args[0])
 			value := args[1]
@@ -44,6 +34,9 @@ func newConfigCmd() *cobra.Command {
 				}
 				fileCfg.Overwrite = overwrite
 			case c.ConfigAnnotation:
+				if len(value) == 0 {
+					return c.ErrInvalidParam
+				}
 				fileCfg.Annotation = value
 			case c.ConfigThreshold:
 				threshold, err := util.ParseInteger([]byte(value))
