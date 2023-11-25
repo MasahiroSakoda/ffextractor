@@ -17,9 +17,9 @@ import (
 
 // DetectSilentSegments returns silent segments with configured values
 func DetectSilentSegments(src string) ([]segment.Model, error) {
-	root, err := config.Root.Load("")
+	c, err := config.Load()
 	if err != nil { return nil, err }
-	extract   := root.Extract
+	extract   := c.Extract
 	threshold := extract.Threshold
 	duration  := extract.SilenceDuration
 
