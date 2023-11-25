@@ -3,6 +3,7 @@ package constants
 const (
 	CommandName string = "ffextractor"
 
-	DefaultConfigFileName string = "config.toml"
-	DefaultConfigFilePath string = "$HOME/.config/" + CommandName + DefaultConfigFileName
+	DefaultConfigFileName string = "config"
+	DefaultConfigFileType string = "toml"
+	DefaultConfigFileDir  string = "$HOME/.config/" + CommandName
 )

@@ -21,10 +21,13 @@ func newConfigCmd() *cobra.Command {
 			field := strings.ToLower(args[0])
 			value := args[1]
 
-			root       := config.Root
-			fileCfg    := root.File
-			extractCfg := root.Extract
-			encodeCfg  := root.Encode
+			cfg, err := config.Load()
+			if err != nil {
+				return err
+			}
+			fileCfg    := cfg.File
+			extractCfg := cfg.Extract
+			encodeCfg  := cfg.Encode
 
 			switch field {
 			case c.ConfigOverwrite:
@@ -39,7 +42,7 @@ func newConfigCmd() *cobra.Command {
 				}
 				fileCfg.Annotation = value
 			case c.ConfigThreshold:
-				threshold, err := util.ParseInteger([]byte(value))
+				threshold, err := strconv.Atoi(value)
 				if err != nil {
 					return err
 				}
@@ -69,11 +72,7 @@ func newConfigCmd() *cobra.Command {
 				}
 				encodeCfg.SplitWithEncode = encode
 			}
-			configPath, err := util.GetConfigFilePath()
-			if err != nil {
-				return err
-			}
-			err = root.Save(configPath)
+			err = cfg.Save()
 			if err != nil {
 				return err
 			}

@@ -17,6 +17,8 @@ var (
 
 	// ErrLoadConfig is error for loading config file
 	ErrLoadConfig       = errors.New("failed to load config file")
+	// ErrSaveConfig is error for loading config file
+	ErrSaveConfig       = errors.New("failed to save config file")
 	// ErrParseConfig is error for parsing config file
 	ErrParseConfig      = errors.New("failed to parse env to config struct")
 	// ErrInvalidConfigKey is error for invalid key into config

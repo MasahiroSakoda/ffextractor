@@ -12,8 +12,9 @@ import (
 // SplitDetectedSegment returns error to extract media segment exclude detected parts
 func SplitDetectedSegment(segment segment.Model, tempDir string) error {
 	output := filepath.Join(tempDir, segment.Output)
-	encode := config.Root.Encode.SplitWithEncode
-	// fmt.Println(output)
+	c, err := config.Load()
+	if err != nil { return err }
+	encode := c.Encode.SplitWithEncode
 
 	a, err := fg.Probe(segment.Output)
 	if err != nil { return err }

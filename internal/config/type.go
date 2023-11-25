@@ -2,25 +2,25 @@ package config
 
 // Config : config root
 type Config struct {
-	File    FileSection    `toml:"file"`
-	Extract ExtractSection `toml:"extract"`
-	Encode  EncodeSection  `toml:"encode"`
+	File    FileSection    `mapstructure:"file"`
+	Extract ExtractSection `mapstructure:"extract"`
+	Encode  EncodeSection  `mapstructure:"encode"`
 }
 // FileSection : file options
 type FileSection struct {
-	Overwrite  bool   `toml:"overwrite"`
-	Annotation string `toml:"annotation"`
+	Overwrite  bool   `mapstructure:"overwrite"`
+	Annotation string `mapstructure:"annotation"`
 }
 
 // ExtractSection : ffmpeg extract options
 type ExtractSection struct {
-	Threshold        int64   `toml:"threshold"`
-	SilenceDuration  float64 `toml:"silence_duration"`
-	BlackoutDuration float64 `toml:"blackout_duration"`
+	Threshold        int     `mapstructure:"threshold"`
+	SilenceDuration  float64 `mapstructure:"silence_duration"`
+	BlackoutDuration float64 `mapstructure:"blackout_duration"`
 }
 
 // EncodeSection : ffmpeg encode options
 type EncodeSection struct {
-	SplitWithEncode  bool `toml:"split_with_encode"`
-	ConcatWithEncode bool `toml:"concat_with_encode"`
+	SplitWithEncode  bool `mapstructure:"split_with_encode"`
+	ConcatWithEncode bool `mapstructure:"concat_with_encode"`
 }
