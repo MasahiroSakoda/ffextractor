@@ -12,9 +12,6 @@ import (
 	"github.com/MasahiroSakoda/ffextractor/internal/constants"
 )
 
-// ProductName :
-const ProductName = "ffextractor"
-
 // Exists returns file existence
 func Exists(p string) bool {
 	if _, err := os.Stat(p); os.IsNotExist(err) {
@@ -78,13 +75,19 @@ func UnixHomeDir() (string, error) {
 // GetConfigDir returns $XDG_CONFIG_HOME directory
 func GetConfigDir() (string, error) {
 	if userConfigDir, err := os.UserConfigDir(); err != nil {
-		return filepath.Join(userConfigDir, ProductName), nil
+		return filepath.Join(userConfigDir, constants.CommandName), nil
 	}
 	homeDir, _ := UnixHomeDir()
 	if homeDir == "" {
 		return "", errors.New("unable to get current user home directory: os/user lookup failed; $HOME is empty")
 	}
-	return filepath.Join(homeDir, ".config", ProductName), nil
+	configDir := filepath.Join(homeDir, ".config", constants.CommandName)
+	if !Exists(configDir) {
+		if err := os.Mkdir(configDir, 0600); err != nil {
+			return "", constants.ErrFileRead
+		}
+	}
+	return configDir, nil
 }
 
 // GetConfigFilePath returns config file path for `ffextractor`
