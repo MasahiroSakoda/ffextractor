@@ -8,14 +8,15 @@ import (
 	"github.com/spf13/viper"
 )
 
-// Load returns result of loading config
-func Load() (*Config, error) {
-	configDir,  _  := util.GetConfigDir()
-	configPath, _  := util.GetConfigFilePath()
+func init() {
 	viper.SetConfigName(constants.DefaultConfigFileName)
 	viper.SetConfigType(constants.DefaultConfigFileType)
-	viper.AddConfigPath(configDir)
+	viper.AddConfigPath("$HOME/.config/" + constants.CommandName)
+}
 
+// Load returns result of loading config
+func Load() (*Config, error) {
+	configPath, _  := util.GetConfigFilePath()
 	if !util.Exists(configPath) {
 		// configure default values
 		viper.SetDefault("file", map[string]any{

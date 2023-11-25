@@ -83,8 +83,8 @@ func GetConfigDir() (string, error) {
 	}
 	configDir := filepath.Join(homeDir, ".config", constants.CommandName)
 	if !Exists(configDir) {
-		if err := os.Mkdir(configDir, 0600); err != nil {
-			return "", constants.ErrFileRead
+		if err := os.MkdirAll(configDir, os.ModePerm); err != nil {
+			return "", constants.ErrMkdir
 		}
 	}
 	return configDir, nil
@@ -92,10 +92,10 @@ func GetConfigDir() (string, error) {
 
 // GetConfigFilePath returns config file path for `ffextractor`
 func GetConfigFilePath() (string, error) {
-	configFile := "config.toml"
+	configFile := constants.DefaultConfigFileName + "." + constants.DefaultConfigFileType
 	configDir, err := GetConfigDir()
 	if err != nil {
-		return filepath.Join("~/.config/ffextractor/", configFile), nil
+		return filepath.Join("~/.config/", constants.CommandName, configFile), nil
 	}
 	return filepath.Join(configDir, configFile), nil
 }
