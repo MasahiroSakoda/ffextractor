@@ -24,7 +24,10 @@ func TestLoad(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T){
 			if tt.existed {
 				configPath, _ := util.GetConfigFilePath()
-				util.RemoveFile(configPath)
+				err := util.RemoveFile(configPath)
+				if err != nil {
+					t.Errorf("%s: %v", constants.ErrFileRemove, err)
+				}
 			}
 			c, err := Load()
 			if err != nil {
@@ -82,7 +85,10 @@ func TestSave(t *testing.T) {
 			cExt.BlackoutDuration = tExt.BlackoutDuration
 			cEnc.SplitWithEncode  = tEnc.SplitWithEncode
 			cEnc.ConcatWithEncode = tEnc.ConcatWithEncode
-			c.Save()
+			err = c.Save()
+			if err != nil {
+				t.Errorf("%s: %v", constants.ErrFileWrite, err)
+			}
 			assert.Equal(t, cFile.Overwrite, tFile.Overwrite)
 			assert.Equal(t, cFile.Overwrite, tFile.Overwrite)
 			assert.Equal(t, cExt.Threshold,        tExt.Threshold)
