@@ -32,7 +32,7 @@ func Load() (*Config, error) {
 			"concat_with_encode": constants.DefaultConcatWithEncode,
 		})
 
-		err := viper.SafeWriteConfigAs(configPath)
+		err := viper.WriteConfigAs(configPath)
 		if err != nil {
 			logrus.Errorf("%s: %v", constants.ErrSaveConfig, err)
 			return nil, err
