@@ -14,7 +14,7 @@ type FileSection struct {
 
 // ExtractSection : ffmpeg extract options
 type ExtractSection struct {
-	Threshold        int64   `toml:"threshold"`
+	Threshold        int     `toml:"threshold"`
 	SilenceDuration  float64 `toml:"silence_duration"`
 	BlackoutDuration float64 `toml:"blackout_duration"`
 }
