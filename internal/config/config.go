@@ -57,5 +57,5 @@ func (c *Config) Save() error {
 	viper.Set("file",    c.File)
 	viper.Set("extract", c.Extract)
 	viper.Set("encode",  c.Encode)
-	return viper.SafeWriteConfig()
+	return viper.WriteConfig()
 }
