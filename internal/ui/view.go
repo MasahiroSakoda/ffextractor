@@ -1,3 +1,4 @@
+// Package ui provides ui interaction built with bubbletea
 package ui
 
 import (

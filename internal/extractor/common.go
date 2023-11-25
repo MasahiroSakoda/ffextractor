@@ -1,3 +1,4 @@
+// Package extractor provides detect -> split -> concat function using `ffmpeg`
 package extractor
 
 import (
@@ -34,6 +35,7 @@ func probeDuration(a string) (float64, error) {
 	return f, nil
 }
 
+// TempSock returns socket file name for progress
 func TempSock(duration float64) string {
 	rand.NewSource(time.Now().Unix())
 	sockFileName := path.Join(os.TempDir(), fmt.Sprintf("%d_sock", rand.Int()))

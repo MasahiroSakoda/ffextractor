@@ -1,3 +1,4 @@
+// Package constants provides common constants
 package constants
 
 import "errors"

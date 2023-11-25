@@ -1,3 +1,4 @@
+// Package config provides function to use config
 package config
 
 // Config : config root
