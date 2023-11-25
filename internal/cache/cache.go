@@ -1,3 +1,4 @@
+// Package cache provides basic cache method
 package cache
 
 import (
@@ -8,11 +9,13 @@ import (
 	"github.com/mitchellh/mapstructure"
 )
 
+// Cache is container struct for cache
 type Cache struct {
 	Expiration time.Time   `json:"expiration"`
 	Data       interface{} `json:"data"`
 }
 
+// New returns new cache container
 func New(ttl time.Duration, data interface{}) *Cache {
 	return &Cache{
 		Expiration: time.Now().Add(ttl),
@@ -20,10 +23,12 @@ func New(ttl time.Duration, data interface{}) *Cache {
 	}
 }
 
+// Expired returns whether cache is expired
 func (c *Cache) Expired() bool {
 	return time.Now().After(c.Expiration)
 }
 
+// Bind provides data binding method
 func (c *Cache) Bind(dst interface{}) error {
 	if err := mapstructure.Decode(c.Data, dst); err != nil {
 		return err
@@ -31,6 +36,7 @@ func (c *Cache) Bind(dst interface{}) error {
 	return nil
 }
 
+// Write provides saving function to json
 func (c *Cache) Write(w io.Writer) error {
 	buf, err := json.Marshal(c)
 	if err != nil {

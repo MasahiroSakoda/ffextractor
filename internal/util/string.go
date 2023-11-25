@@ -1,3 +1,4 @@
+// Package util provides function for utility
 package util
 
 import (
@@ -9,6 +10,7 @@ import (
 	"github.com/jedib0t/go-pretty/v6/text"
 )
 
+// TruncateString returns truncated string
 func TruncateString(s string, l int) (string, bool) {
 	rows := strings.Split(s, "\n")
 	trunc := false
@@ -24,14 +26,17 @@ func TruncateString(s string, l int) (string, bool) {
 	return s, trunc
 }
 
+// PaddingRight returns string layout for bubbletea
 func PaddingRight(s string, l int) string {
 	return text.Pad(s, l, ' ')
 }
 
+// String returns string
 func String(v string) *string {
 	return &v
 }
 
+// Border returns string to use bubbletea
 func Border(str string, style lipgloss.Style) string {
 	// NOTE: Don't use `lipgloss.Border“.
 	//	See https://github.com/charmbracelet/lipgloss/issues/40 .

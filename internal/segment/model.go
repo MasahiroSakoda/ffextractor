@@ -1,3 +1,4 @@
+// Package segment provides model for media segment
 package segment
 
 // Model represents detected segment model

@@ -1,3 +1,4 @@
+// Package cmd provides command using cobra cli library
 package cmd
 
 import (
