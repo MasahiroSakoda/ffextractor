@@ -22,11 +22,13 @@ func TestLoad(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T){
+			configPath, _ := util.GetConfigFilePath()
 			if tt.existed {
-				configPath, _ := util.GetConfigFilePath()
-				err := util.RemoveFile(configPath)
-				if err != nil {
-					t.Errorf("%s: %v", constants.ErrFileRemove, err)
+				if util.Exists(configPath) {
+					err := util.RemoveFile(configPath)
+					if err != nil {
+						t.Errorf("%s: %v", constants.ErrFileRemove, err)
+					}
 				}
 			}
 			c, err := Load()
