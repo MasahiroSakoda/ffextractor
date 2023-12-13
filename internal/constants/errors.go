@@ -1,7 +1,9 @@
 // Package constants provides common constants
 package constants
 
-import "errors"
+import (
+	"github.com/cockroachdb/errors"
+)
 
 var (
 	// ErrUnexpected is used for unknown reason
