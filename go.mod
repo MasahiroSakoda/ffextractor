@@ -6,6 +6,7 @@ require (
 	github.com/charmbracelet/bubbles v0.16.1
 	github.com/charmbracelet/bubbletea v0.24.2
 	github.com/charmbracelet/lipgloss v0.9.1
+	github.com/cockroachdb/errors v1.11.1
 	github.com/google/go-github/v55 v55.0.0
 	github.com/jedib0t/go-pretty/v6 v6.4.9
 	github.com/mitchellh/mapstructure v1.5.0
@@ -22,7 +23,6 @@ require (
 	github.com/aws/aws-sdk-go v1.38.20 // indirect
 	github.com/aymanbagabas/go-osc52/v2 v2.0.1 // indirect
 	github.com/cloudflare/circl v1.3.3 // indirect
-	github.com/cockroachdb/errors v1.11.1 // indirect
 	github.com/cockroachdb/logtags v0.0.0-20230118201751-21c54148d20b // indirect
 	github.com/cockroachdb/redact v1.1.5 // indirect
 	github.com/containerd/console v1.0.4-0.20230313162750-1ae8d489ac81 // indirect
