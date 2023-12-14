@@ -15,16 +15,15 @@ func TestLoad(t *testing.T) {
 	tests := []struct{
 		name    string
 		existed bool
-		expect  bool
 	}{
-		{ existed: false, expect: true, name: "Successfully loaded default config values" },
-		{ existed: true,  expect: true, name: "Successfully loaded existed config values" },
+		{ existed: false, name: "Successfully loaded default config values" },
+		{ existed: true,  name: "Successfully loaded existed config values" },
 	}
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T){
 			configPath, _ := util.GetConfigFilePath()
-			if tt.existed {
+			if !tt.existed {
 				if util.Exists(configPath) {
 					err := util.RemoveFile(configPath)
 					if err != nil {
@@ -37,13 +36,13 @@ func TestLoad(t *testing.T) {
 				t.Errorf("%s: %v", constants.ErrLoadConfig, err)
 			}
 			f, ext, enc := c.File, c.Extract, c.Encode
-			assert.Equal(t, tt.expect, f.Overwrite          == constants.DefaultOverwrite)
-			assert.Equal(t, tt.expect, f.Annotation         == constants.DefaultAnnotation)
-			assert.Equal(t, tt.expect, ext.Threshold        == constants.DefaultThreshold)
-			assert.Equal(t, tt.expect, ext.SilenceDuration  == constants.DefaultSilenceDuration)
-			assert.Equal(t, tt.expect, ext.BlackoutDuration == constants.DefaultBlackoutDuration)
-			assert.Equal(t, tt.expect, enc.SplitWithEncode  == constants.DefaultSplitWithEncode)
-			assert.Equal(t, tt.expect, enc.ConcatWithEncode == constants.DefaultConcatWithEncode)
+			assert.Equal(t, constants.DefaultOverwrite,         f.Overwrite)
+			assert.Equal(t, constants.DefaultAnnotation,        f.Annotation)
+			assert.Equal(t, constants.DefaultThreshold,         ext.Threshold)
+			assert.Equal(t, constants.DefaultSilenceDuration,   ext.SilenceDuration)
+			assert.Equal(t, constants.DefaultBlackoutDuration,  ext.BlackoutDuration)
+			assert.Equal(t, constants.DefaultSplitWithEncode,   enc.SplitWithEncode)
+			assert.Equal(t, constants.DefaultConcatWithEncode,  enc.ConcatWithEncode)
 		})
 	}
 }
