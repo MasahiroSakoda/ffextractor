@@ -3,19 +3,10 @@ package extractor
 
 import (
 	"os"
-	"runtime"
-	"path/filepath"
 	"testing"
 
 	"github.com/MasahiroSakoda/ffextractor/internal/constants"
 	"github.com/MasahiroSakoda/ffextractor/internal/util"
-)
-
-var (
-	_, b, _, _ = runtime.Caller(0)
-
-	// Root folder of this project
-	rootDir = filepath.Join(filepath.Dir(b), "../..")
 )
 
 func TestSplitDetectedSegment(t *testing.T) {
