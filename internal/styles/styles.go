@@ -5,9 +5,9 @@ import "github.com/charmbracelet/lipgloss"
 
 var (
 	// ColorMain is primary color
-	ColorMain = lipgloss.Color("#ff00ff")
+	ColorMain = lipgloss.Color("#00ccff")
 	// ColorErr is to display error
-	ColorErr  = lipgloss.Color("#ff0000")
+	ColorErr  = lipgloss.Color("#ff3399")
 
 	// StyleSpinner is style for spinner
 	StyleSpinner            = lipgloss.NewStyle().Foreground(ColorMain)
