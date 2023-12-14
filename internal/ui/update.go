@@ -38,7 +38,8 @@ func (m *Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		tickEvery()
 
 	case errMsg:
-		errors.WithDetail(msg.err, "Error detected")
+		err := errors.WithDetail(msg.err, "Error detected")
+		logrus.Errorf("Concatenate completed: %s", err)
 		if !m.detecting && !m.splitting && !m.concatenating {
 			return m, tea.Quit
 		}
@@ -75,8 +76,8 @@ func (m *Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 	// msg for split detected segments
 	case splitProcessingMsg:
-		// m.segments = m.removeSegment(msg.index)
-		// m.makeTableRows()
+		m.segments = m.removeSegment(msg.index)
+		m.makeTableRows()
 
 	// msg for split process completed
 	case splitCompletedMsg:
@@ -85,6 +86,8 @@ func (m *Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		m.concatFile.Close()
 		// cmd := m.executeConcatSegments(m.path)
 		// cmds = append(cmds, cmd)
+		// FIXME: remove after concat implemented
+		return m, tea.Quit
 
 	// msg for concatenate process completed
 	case concatCompletedMsg:
