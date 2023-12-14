@@ -59,7 +59,10 @@ func (m *Model) fetchSplittedSegments() tea.Cmd {
 			m.table.SetCursor(i)
 			m.splitProcessing(i)
 			if segment.Output != "" {
-				m.concatFile.WriteString(fmt.Sprintf("file '%s'\n", segment.Output))
+				_, err = m.concatFile.WriteString(fmt.Sprintf("file '%s'\n", segment.Output))
+				if err != nil {
+					return errMsg{err: constants.ErrSplitSegment}
+				}
 			}
 		}
 		return splitCompletedMsg{}
@@ -72,11 +75,10 @@ func (m *Model) splitProcessing(index int) tea.Msg {
 
 func (m *Model) executeConcatSegments(filePath string) tea.Cmd {
 	return func() tea.Msg {
-		// output, err := extractor.ConcatDetectedSegments(m.concatFile.Name(), filePath)
-		// if err != nil {
-		// 	return errorDetected(err)
-		// }
-		// return concatCompletedMsg{output: output}
-		return concatCompletedMsg{}
+		output, err := extractor.ConcatDetectedSegments(m.concatFile.Name(), filePath)
+		if err != nil {
+			return errorDetected(err)
+		}
+		return concatCompletedMsg{output: output}
 	}
 }
