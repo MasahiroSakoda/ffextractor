@@ -23,7 +23,7 @@ func TestLoad(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T){
 			configPath, _ := util.GetConfigFilePath()
-			if tt.existed {
+			if !tt.existed {
 				if util.Exists(configPath) {
 					err := util.RemoveFile(configPath)
 					if err != nil {
