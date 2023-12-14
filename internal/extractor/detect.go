@@ -9,6 +9,7 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/MasahiroSakoda/ffextractor/internal/constants"
 	"github.com/MasahiroSakoda/ffextractor/internal/config"
 	"github.com/MasahiroSakoda/ffextractor/internal/segment"
 	"github.com/MasahiroSakoda/ffextractor/internal/util"
@@ -35,7 +36,9 @@ func DetectSilentSegments(src string) ([]segment.Model, error) {
 			WithOutput(&out, &out). // Capture Stdout
 			// Compile().
 			Run()
-	if err != nil { return nil, err }
+	if err != nil {
+		return nil, fmt.Errorf("%s: %+v", constants.ErrSilenceDetect, err)
+	}
 	return parseDetectedSegments(src, out.Bytes())
 }
 
