@@ -24,7 +24,6 @@ type Model struct {
 	detecting     bool
 	splitting     bool
 	concatenating bool
-	err error
 
 	// ui components (view models)
 	spinner spinner.Model
