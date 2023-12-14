@@ -73,12 +73,12 @@ func (m *Model) splitProcessing(index int) tea.Msg {
 	return splitProcessingMsg{index: index}
 }
 
-func (m *Model) executeConcatSegments(filePath string) tea.Cmd {
-	return func() tea.Msg {
-		output, err := extractor.ConcatDetectedSegments(m.concatFile.Name(), filePath)
-		if err != nil {
-			return errorDetected(err)
-		}
-		return concatCompletedMsg{output: output}
-	}
-}
+// func (m *Model) executeConcatSegments(filePath string) tea.Cmd {
+// 	return func() tea.Msg {
+// 		output, err := extractor.ConcatDetectedSegments(m.concatFile.Name(), filePath)
+// 		if err != nil {
+// 			return errorDetected(err)
+// 		}
+// 		return concatCompletedMsg{output: output}
+// 	}
+// }
