@@ -2,10 +2,8 @@
 package extractor
 
 import (
-	"fmt"
 	"path/filepath"
 
-	"github.com/MasahiroSakoda/ffextractor/internal/constants"
 	"github.com/MasahiroSakoda/ffextractor/internal/config"
 	"github.com/MasahiroSakoda/ffextractor/internal/segment"
 
@@ -40,5 +38,5 @@ func SplitDetectedSegment(segment segment.Model, tempDir string) error {
 			// GlobalArgs("-progress", "unix://" + TempSock(totalDuration)).
 			// Compile().
 			Run()
-	return fmt.Errorf("%s: %+v", constants.ErrSplitSegment, err)
+	return err
 }
