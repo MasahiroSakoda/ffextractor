@@ -27,7 +27,7 @@ const (
 	DefaultAnnotation = "_merged"
 
 	// DefaultThreshold is default value for `threshold` option
-	DefaultThreshold        = -10
+	DefaultThreshold        = -25
 	// DefaultSilenceDuration is default value for `silence_duration` option
 	DefaultSilenceDuration  = 10.0
 	// DefaultBlackoutDuration is default value for `blackout_duration` option
