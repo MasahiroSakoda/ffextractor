@@ -25,16 +25,16 @@ func SplitDetectedSegment(segment segment.Model, tempDir string) error {
 		outArgs = fg.KwArgs{"t": segment.Duration, "c": "copy"}
 	}
 
-	a, err := fg.Probe(segment.Output)
-	if err != nil { return err }
-	totalDuration, err := probeDuration(a)
-	if err != nil { return err }
+	// a, err := fg.Probe(segment.Output)
+	// if err != nil { return err }
+	// totalDuration, err := probeDuration(a)
+	// if err != nil { return err }
 
 	err = fg.Input(segment.Input, inArgs).
 			Output(output, outArgs).
 			Silent(true).
 			OverWriteOutput().
-			 GlobalArgs("-progress", "unix://" + TempSock(totalDuration)).
+			// GlobalArgs("-progress", "unix://" + TempSock(totalDuration)).
 			// Compile().
 			Run()
 	return err
