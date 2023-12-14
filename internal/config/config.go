@@ -24,7 +24,7 @@ func Load() (*Config, error) {
 			"overwrite":  constants.DefaultOverwrite,
 			"annotation": constants.DefaultAnnotation,
 		})
-		viper.SetDefault("extract", map[string]any{
+		viper.SetDefault("extract", map[string]float32{
 			"threshold":         constants.DefaultThreshold,
 			"silence_duration":  constants.DefaultSilenceDuration,
 			"blackout_duration": constants.DefaultBlackoutDuration,
