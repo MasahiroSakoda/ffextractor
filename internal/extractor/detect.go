@@ -31,6 +31,7 @@ func DetectSilentSegments(src string) ([]segment.Model, error) {
 	src = filepath.Clean(src)
 	err = fg.Input(src).
 			Output("-", fg.KwArgs{"af": arg, "f": "null"}).
+			Silent(true).
 			WithOutput(&out, &out). // Capture Stdout
 			// Compile().
 			Run()
