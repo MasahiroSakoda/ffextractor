@@ -32,6 +32,7 @@ func SplitDetectedSegment(segment segment.Model, tempDir string) error {
 
 	err = fg.Input(segment.Input, inArgs).
 			Output(output, outArgs).
+			Silent(true).
 			OverWriteOutput().
 			// TODO: add progress function
 			// GlobalArgs("-progress", "unix://" + TempSock(totalDuration)).
