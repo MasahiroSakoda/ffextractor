@@ -1,0 +1,10 @@
+# -*-mode:conf-toml-*- vim:ft=toml
+
+[env]
+
+[tools]
+go = "1.21.5"
+
+legacy_version_file_disable_tools = [          # disable for specific tools
+  "go",
+]
